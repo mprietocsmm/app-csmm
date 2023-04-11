@@ -1,14 +1,22 @@
 package com.example.myapplication.rest;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
+import androidx.annotation.Nullable;
+
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.myapplication.utils.CustomRetryPolicy;
 
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Rest {
 
@@ -22,6 +30,10 @@ public class Rest {
 
     private Rest(Context context) {
         this.context = context;
+    }
+
+    public String getBASE_URL() {
+        return BASE_URL;
     }
 
     public static Rest getInstance(Context context) {
@@ -41,6 +53,41 @@ public class Rest {
                 onResponse,
                 onErrorResponse
         ));
+    }
+
+    public void login(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/login",
+                body,
+                onResponse,
+                onErrorResponse
+        ).setRetryPolicy(new CustomRetryPolicy()));
+    }
+
+    class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
+        private Context context;
+
+        public JsonObjectRequestWithCustomAuth(int method,
+                                               String url,
+                                               @Nullable JSONObject jsonRequest,
+                                               Response.Listener<JSONObject> listener,
+                                               @Nullable Response.ErrorListener errorListener,
+                                               Context context) {
+            super(method, url, jsonRequest, listener, errorListener);
+            this.context = context;
+        }
+
+        @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+            SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
+            String sessionToken = preferences.getString("tokenSession", null);
+
+            HashMap<String, String> myHeaders = new HashMap<>();
+            myHeaders.put("Token", sessionToken);
+            return myHeaders;
+        }
     }
 
 }
