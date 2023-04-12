@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
+    'csmm_app.apps.CsmmAppConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -72,15 +73,16 @@ WSGI_APPLICATION = 'csmm_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+import config
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'csmm_gestor',
-        'USER': 'csmm_gestor',
-        'PASSWORD':'rWyyV2(90^=5',
-        'HOST': 'hl1121.dinaserver.com',
-        'PORT':'3306',
+        'NAME': config.NAME,
+        'USER': config.USER,
+        'PASSWORD': config.PASSWORD,
+        'HOST': config.HOST,
+        'PORT': config.PORT,
     }
 }
 
@@ -120,6 +122,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

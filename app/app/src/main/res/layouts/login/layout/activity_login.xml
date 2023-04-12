@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#134FAB">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="180dp"
+        android:layout_height="270dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="45dp" />
+
+    <TextView
+        android:id="@+id/nombre"
+        android:layout_width="wrap_content"
+        android:layout_height="28dp"
+        android:layout_marginTop="23dp"
+        android:fontFamily="@font/source_sans_pro"
+        android:text="Colegio Santa María del Mar"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logo"
+        android:textSize="18dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/emailTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/emailEditText"
+        app:layout_constraintBottom_toTopOf="@id/emailEditText"
+        android:paddingStart="3dp"
+        android:fontFamily="@font/source_sans_pro"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:text="Email"/>
+
+    <EditText
+        android:id="@+id/emailEditText"
+        android:layout_width="270dp"
+        android:layout_height="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nombre"
+        android:layout_marginTop="75dp"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/white"
+        android:fontFamily="@font/source_sans_pro"/>
+
+    <TextView
+        android:id="@+id/constraseñaTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/constraseñaEditText"
+        app:layout_constraintBottom_toTopOf="@id/constraseñaEditText"
+        android:paddingStart="3dp"
+        android:fontFamily="@font/source_sans_pro"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:textSize="16dp"
+        android:text="Contraseña"/>
+
+    <EditText
+        android:id="@+id/constraseñaEditText"
+        android:layout_width="270dp"
+        android:layout_height="48dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailEditText"
+        android:layout_marginTop="50dp"
+        android:inputType="textPassword"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/white"
+        android:fontFamily="@font/source_sans_pro"/>
+
+    <Button
+        android:id="@+id/inicioSesionBoton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/emailEditText"
+        app:layout_constraintEnd_toEndOf="@+id/emailEditText"
+        app:layout_constraintTop_toBottomOf="@+id/constraseñaEditText"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/borde_botones"
+        android:textColor="@color/black"
+        android:fontFamily="@font/source_sans_pro"
+        android:text="Iniciar Sesión" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,5 +19,6 @@ from csmm_app import endpoints
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('health', endpoints.health)
+    path('health', endpoints.health),
+    path('login', endpoints.login)
 ]
