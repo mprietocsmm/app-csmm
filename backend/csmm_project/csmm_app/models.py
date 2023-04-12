@@ -76,6 +76,16 @@ class Asignaturas(models.Model):
         managed = False
         db_table = 'asignaturas'
 
+
+class CursosEscolares(models.Model):
+    id = models.IntegerField(primary_key=True)
+    curso_escolar = models.CharField(max_length=250)
+
+    class Meta:
+        managed = False
+        db_table = 'cursos_escolares'
+
+
 class AlumnosAsignaturas(models.Model):
     id = models.IntegerField(primary_key=True)
     id_alumno = models.ForeignKey(Alumnos, models.DO_NOTHING, db_column='id_alumno')
@@ -235,15 +245,6 @@ class ComunicacionesDestinos(models.Model):
     class Meta:
         managed = False
         db_table = 'comunicaciones_destinos'
-
-
-class CursosEscolares(models.Model):
-    id = models.IntegerField(primary_key=True)
-    curso_escolar = models.CharField(max_length=250)
-
-    class Meta:
-        managed = False
-        db_table = 'cursos_escolares'
 
 
 class DjangoAdminLog(models.Model):

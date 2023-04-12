@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from csmm_app.models import Alumnos, Familias, AlumnosFamilias, AlumnosAsignaturas, Asignaturas, Materias, Horario, Administradores, Profesores, MarcoHorario
-import bcrypt, json
+from csmm_app.models import Alumnos, Familias, AlumnosFamilias, AlumnosAsignaturas, Asignaturas, Materias, Horario, Administradores, Profesores, MarcoHorario, CursosEscolares
+import bcrypt, json, time
 
 def health(requests):
     return JsonResponse({"health": "ok"}, safe=False)
@@ -58,9 +58,25 @@ def login(request):
         return JsonResponse({"error": "No such username in the database"}, status=404)
     
 
+@csrf_exempt
+def inicio(request):
+    inicio = time.time()
+    if request.method != 'POST':
+        return JsonResponse({"error": "Método HTTP no soportado"}, status=405)
 
-
-
+    body = json.loads(request.body)
+    usuario = busqueda_usuario(body['usuario'], body['tipoUsuario'])
+    if body['tipoUsuario'] == 2:
+        print("tiempo -> ", time.time() - inicio)
+        return JsonResponse({
+            "nombre": usuario[0].nombre + ' ' + usuario[0].apellido1 + ' ' + usuario[0].apellido2,
+            "curso": "1º BACH"
+        }, safe=False)
+    elif body['tipoUsuario'] == 4:
+        print("tiempo -> ", time.time() - inicio)
+        return JsonResponse({
+            "nombre": usuario[0].nombre + ' ' + usuario[0].apellido1 + ' ' + usuario[0].apellido2
+        }, safe=False)
 
 
 
@@ -75,3 +91,14 @@ def tipo_usuario(nombre):
         return 4
     else:
         return 0
+    
+
+def busqueda_usuario(usuario, tipo):
+    if tipo == 1:
+        return Administradores.objects.filter(usuario=usuario)
+    elif tipo == 2:
+        return Alumnos.objects.filter(usuario=usuario)
+    elif tipo == 3:
+        return Familias.objects.filter(usuario=usuario)
+    elif tipo == 4:
+        return Profesores.objects.filter(usuario=usuario)
