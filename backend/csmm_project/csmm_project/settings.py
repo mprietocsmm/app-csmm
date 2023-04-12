@@ -73,15 +73,16 @@ WSGI_APPLICATION = 'csmm_project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+import config
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'csmm_gestor',
-        'USER': 'csmm_gestor',
-        'PASSWORD':'rWyyV2(90^=5',
-        'HOST': 'hl1121.dinaserver.com',
-        'PORT':'3306',
+        'NAME': config.NAME,
+        'USER': config.USER,
+        'PASSWORD': config.PASSWORD,
+        'HOST': config.HOST,
+        'PORT': config.PORT,
     }
 }
 
