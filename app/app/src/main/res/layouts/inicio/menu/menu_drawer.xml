@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_item_inicio"
+        android:icon="@drawable/home_icon"
+        android:title="Inicio"/>
+
+    <item
+        android:id="@+id/nav_item_horario"
+        android:icon="@drawable/horario_icon"
+        android:title="Horario"/>
+
+    <item
+        android:id="@+id/nav_item_comunicaciones"
+        android:icon="@drawable/comunicaciones_icon"
+        android:title="Comunicaciones"/>
+
+    <item
+        android:id="@+id/nav_item_asignaturas"
+        android:icon="@drawable/asignaturas_icon"
+        android:title="Asignaturas"/>
+</menu>

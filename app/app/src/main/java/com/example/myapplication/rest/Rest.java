@@ -66,6 +66,17 @@ public class Rest {
         ).setRetryPolicy(new CustomRetryPolicy()));
     }
 
+    public void inicio(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/inicio",
+                body,
+                onResponse,
+                onErrorResponse
+        ).setRetryPolicy(new CustomRetryPolicy()));
+    }
+
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 
