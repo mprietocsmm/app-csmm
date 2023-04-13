@@ -1,6 +1,7 @@
 package com.example.myapplication.inicio;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,10 +17,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapplication.R;
+import com.example.myapplication.comunicaciones.Comunicaciones;
 import com.example.myapplication.rest.Rest;
 import com.google.android.material.navigation.NavigationView;
 
@@ -48,7 +51,6 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
         drawer = findViewById(R.id.drawer_layout);
 
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu_icon);
 
         drawer.addDrawerListener(toggle);
 
@@ -96,6 +98,7 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
                 },
                 body);
     }
+
     @Override
     public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onPostCreate(savedInstanceState, persistentState);
@@ -119,14 +122,26 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+        Fragment fragment = null;
         switch (item.getItemId()) {
             case R.id.nav_item_inicio:
                 Toast.makeText(this, "Clicaste Inicio", Toast.LENGTH_LONG).show();
                 break;
             case R.id.nav_item_asignaturas:
                 Toast.makeText(this, "Clicaste Asignaturas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_item_comunicaciones:
+                fragment = Comunicaciones.newInstance();
+                break;
+                
         }
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                //.setCustomAnimations(R.anim.nav_enter, R.anim.nav_exit)
+                .replace(R.id.fragment_content, fragment)
+                .addToBackStack(null)
+                .commit();
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }

@@ -17,13 +17,17 @@ public class Launcher extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent;
+        /*
         if (getSharedPreferences() != null) {
             intent = new Intent(this, Inicio.class);
 
         } else {
             intent = new Intent(this, Login.class);
         }
+        */
+        intent = new Intent(this, Inicio.class);
         startActivity(intent);
+        finish();
     }
 
     private String getSharedPreferences() {
