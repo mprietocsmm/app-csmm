@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -14,9 +15,10 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class Comunicaciones extends Fragment {
-    private Context context = getActivity();
+    private Context context = getContext();
 
     public static Comunicaciones newInstance() {
         Comunicaciones fragment = new Comunicaciones();
@@ -26,16 +28,19 @@ public class Comunicaciones extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        System.out.println("Fragment comunicaciones");
-        Toast.makeText(context, "Fragment comunicaciones", Toast.LENGTH_SHORT).show();
-        View view = inflater.inflate(R.layout.fragment_comunicaciones, container, false);
-        TextView textView = view.findViewById(R.id.textView);
-        textView.setText("Comunicaciones");
-        return view;
+        return inflater.inflate(R.layout.fragment_comunicaciones, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        FloatingActionButton button = view.findViewById(R.id.botonNuevaComunicacion);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Botón flotante", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

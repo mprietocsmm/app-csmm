@@ -60,20 +60,17 @@ def login(request):
 
 @csrf_exempt
 def inicio(request):
-    inicio = time.time()
     if request.method != 'POST':
         return JsonResponse({"error": "Método HTTP no soportado"}, status=405)
 
     body = json.loads(request.body)
     usuario = busqueda_usuario(body['usuario'], body['tipoUsuario'])
     if body['tipoUsuario'] == 2:
-        print("tiempo -> ", time.time() - inicio)
         return JsonResponse({
             "nombre": usuario[0].nombre + ' ' + usuario[0].apellido1 + ' ' + usuario[0].apellido2,
             "curso": "1º BACH"
         }, safe=False)
     elif body['tipoUsuario'] == 4:
-        print("tiempo -> ", time.time() - inicio)
         return JsonResponse({
             "nombre": usuario[0].nombre + ' ' + usuario[0].apellido1 + ' ' + usuario[0].apellido2
         }, safe=False)

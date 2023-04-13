@@ -38,12 +38,14 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_inicio);
+
         try {
             peticionInicio();
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        setContentView(R.layout.activity_inicio);
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
@@ -62,6 +64,9 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
         navigationView.setNavigationItemSelectedListener(this);
 
         toggle.syncState();
+
+        // Configuración del elemento default para que aparezca al iniciarse la activity y salga check
+        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_item_comunicaciones).setChecked(true));
     }
 
     private void peticionInicio() throws JSONException {
@@ -136,14 +141,21 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
                 
         }
 
+        if (fragment != null) {
+            setFragment(fragment);
+        }
+
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    private void setFragment(Fragment fragment) {
         getSupportFragmentManager()
                 .beginTransaction()
                 //.setCustomAnimations(R.anim.nav_enter, R.anim.nav_exit)
-                .replace(R.id.fragment_content, fragment)
+                .replace(R.id.fragment_container, fragment)
                 .addToBackStack(null)
                 .commit();
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
     @Override
