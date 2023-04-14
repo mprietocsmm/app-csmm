@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,7 +21,16 @@ import com.example.myapplication.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class Comunicaciones extends Fragment {
-    private Context context = getContext();
+    /*
+    private Animation rotateOpen = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_open_anim);
+    private Animation rotateClose = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_close_anim);
+    private Animation fromBottom = AnimationUtils.loadAnimation(getActivity(), R.anim.from_bottom_anim);
+    private Animation toBottom = AnimationUtils.loadAnimation(getActivity(), R.anim.to_bottom_anim);
+     */
+
+    private FloatingActionButton desplegable, crearComunicado, crearAsistencia;
+    private Button button;
+    private boolean clicked = false;
 
     public static Comunicaciones newInstance() {
         Comunicaciones fragment = new Comunicaciones();
@@ -36,18 +47,74 @@ public class Comunicaciones extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        FloatingActionButton button = view.findViewById(R.id.botonNuevaComunicacion);
-        button.setOnClickListener(buttonListener);
+        desplegable = view.findViewById(R.id.botonDesplegable);
+        desplegable.setOnClickListener(desplegableistener);
+
+        crearComunicado = view.findViewById(R.id.botonNuevoComunicado);
+        crearComunicado.setOnClickListener(crearComunicadoListener);
+
+        crearAsistencia = view.findViewById(R.id.botonNuevaAsistencia);
+        crearAsistencia.setOnClickListener(crearAsistenciaListener);
+
+
     }
 
-    View.OnClickListener buttonListener = new View.OnClickListener() {
+
+    View.OnClickListener desplegableistener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            setVisibility(clicked);
+            setAnimation(clicked);
+            setClickable(clicked);
+            clicked = !clicked;
+        }
+    };
+
+    View.OnClickListener crearComunicadoListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(getContext(), CrearComunicacion.class);
             startActivity(intent);
-            // Transicion entre actividades
-            //getActivity().overridePendingTransition(R.transition.enter_activity, R.transition.exit_activity);
         }
     };
+
+    View.OnClickListener crearAsistenciaListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(getContext(), "Crear asistencia", Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private void setVisibility(boolean clicked) {
+        if (!clicked) {
+            crearComunicado.setVisibility(View.VISIBLE);
+            crearAsistencia.setVisibility(View.VISIBLE);
+        } else {
+            crearComunicado.setVisibility(View.GONE);
+            crearAsistencia.setVisibility(View.GONE);
+        }
+    }
+
+    private void setAnimation(boolean clicked) {
+        if (!clicked) {
+            crearComunicado.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.from_bottom_anim));
+            crearAsistencia.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.from_bottom_anim));
+            desplegable.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_open_anim));
+        } else {
+            crearComunicado.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.to_bottom_anim));
+            crearAsistencia.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.to_bottom_anim));
+            desplegable.startAnimation(AnimationUtils.loadAnimation(getActivity(), R.anim.rotate_close_anim));
+        }
+    }
+
+    private void setClickable(boolean clicked) {
+        if (clicked) {
+            crearComunicado.setClickable(false);
+            crearAsistencia.setClickable(false);
+        } else {
+            crearComunicado.setClickable(true);
+            crearAsistencia.setClickable(true);
+        }
+    }
 
 }

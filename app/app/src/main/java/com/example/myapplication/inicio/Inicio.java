@@ -62,6 +62,8 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.blue)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        // Cambiar titulo de la ActionBar
+        getSupportActionBar().setTitle("Inicio");
 
         NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);

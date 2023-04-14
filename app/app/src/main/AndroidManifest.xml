@@ -19,17 +19,26 @@
         <activity
             android:name=".launcher.Launcher"
             android:theme="@style/SplashScreen"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".login.Login"/>
-        <activity android:name=".inicio.Inicio"/>
-        <activity android:name=".comunicaciones.CrearComunicacion"/>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".login.Login"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".inicio.Inicio"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".comunicaciones.CrearComunicacion"
+            android:screenOrientation="portrait"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

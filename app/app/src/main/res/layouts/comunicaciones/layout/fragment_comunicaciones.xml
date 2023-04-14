@@ -1,19 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/botonNuevaComunicacion"
-        android:src="@drawable/add_icon"
+        android:id="@+id/botonDesplegable"
+        app:srcCompat="@drawable/add_icon"
         app:maxImageSize="30dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:backgroundTint="?attr/colorPrimaryVariant" />
+        android:layout_margin="18dp"
+        android:focusable="true"
+        android:tint="@color/white"
+        android:clickable="true"
+        android:backgroundTint="?attr/colorPrimary" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/botonNuevoComunicado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/botonDesplegable"
+        app:layout_constraintEnd_toEndOf="@+id/botonDesplegable"
+        app:srcCompat="@drawable/edit_icon"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:visibility="gone"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/botonNuevaAsistencia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toTopOf="@+id/botonNuevoComunicado"
+        app:layout_constraintEnd_toEndOf="@+id/botonDesplegable"
+        app:srcCompat="@drawable/check_icon"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
