@@ -3,11 +3,15 @@ package com.example.myapplication.launcher;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
+import com.example.myapplication.R;
 import com.example.myapplication.inicio.Inicio;
 import com.example.myapplication.login.Login;
 
@@ -15,6 +19,7 @@ public class Launcher extends Activity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+       getApplication().setTheme(R.style.Theme_MyApplication);
         super.onCreate(savedInstanceState);
         Intent intent;
         /*

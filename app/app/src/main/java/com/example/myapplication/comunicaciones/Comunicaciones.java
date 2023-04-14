@@ -1,6 +1,7 @@
 package com.example.myapplication.comunicaciones;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,11 +37,17 @@ public class Comunicaciones extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         FloatingActionButton button = view.findViewById(R.id.botonNuevaComunicacion);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getContext(), "Botón flotante", Toast.LENGTH_SHORT).show();
-            }
-        });
+        button.setOnClickListener(buttonListener);
     }
+
+    View.OnClickListener buttonListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(getContext(), CrearComunicacion.class);
+            startActivity(intent);
+            // Transicion entre actividades
+            //getActivity().overridePendingTransition(R.transition.enter_activity, R.transition.exit_activity);
+        }
+    };
+
 }
