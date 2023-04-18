@@ -55,6 +55,17 @@ public class Rest {
         ));
     }
 
+    public void authenticate(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/autenticar",
+                body,
+                onResponse,
+                onErrorResponse
+        ));
+    }
+
     public void login(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonObjectRequest(
@@ -77,6 +88,17 @@ public class Rest {
         ).setRetryPolicy(new CustomRetryPolicy()));
     }
 
+    public void comunicaciones(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/comunicaciones",
+                body,
+                onResponse,
+                onErrorResponse
+        )).setRetryPolicy(new CustomRetryPolicy());
+    }
+
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 
@@ -92,11 +114,11 @@ public class Rest {
 
         @Override
         public Map<String, String> getHeaders() throws AuthFailureError {
-            SharedPreferences preferences = context.getSharedPreferences("user", Context.MODE_PRIVATE);
-            String sessionToken = preferences.getString("tokenSession", null);
+            SharedPreferences preferences = context.getSharedPreferences("usuario", Context.MODE_PRIVATE);
+            String sessionToken = preferences.getString("token", null);
 
             HashMap<String, String> myHeaders = new HashMap<>();
-            myHeaders.put("Token", sessionToken);
+            myHeaders.put("token", sessionToken);
             return myHeaders;
         }
     }

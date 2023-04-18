@@ -6,7 +6,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_anchorGravity="center" />
 
 
     <com.google.android.material.textfield.TextInputLayout
@@ -14,7 +22,7 @@
         android:id="@+id/destinatarioTextInput"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
         android:layout_marginHorizontal="32dp"
         android:layout_marginTop="50dp"
         app:helperText="Obligatorio*"
@@ -51,14 +59,23 @@
         android:layout_height="128dp"
         app:layout_constraintTop_toBottomOf="@+id/asuntoTextInput"
         android:layout_marginHorizontal="32dp"
-        android:layout_marginTop="50dp"
-        android:textAlignment="textStart">
+        android:layout_marginTop="50dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Mensaje" />
+            android:hint="Mensaje"
+            android:gravity="top|start"
+            android:textAlignment="textStart" />
     </com.google.android.material.textfield.TextInputLayout>
 
+
+    <Button
+        android:id="@+id/enviarButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/mensajeTextInput"
+
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

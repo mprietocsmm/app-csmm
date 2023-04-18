@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <style name="SplashScreen" parent="Theme.AppCompat.NoActionBar">
+    <style name="SplashScreen" parent="Theme.SplashScreen">
+        <item name="postSplashScreenTheme">@style/Theme.MyApplication</item>
         <item name="android:windowSplashScreenBackground">#134FAB</item>
-        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowEnterTransition">@android:anim/fade_in</item>
         <item name="android:windowExitTransition">@android:anim/fade_out</item>

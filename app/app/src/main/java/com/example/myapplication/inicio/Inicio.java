@@ -1,7 +1,9 @@
 package com.example.myapplication.inicio;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -76,28 +78,19 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
 
     private void peticionInicio() throws JSONException {
         JSONObject body = new JSONObject();
-        body.put("usuario", "ivangt");
-        body.put("tipoUsuario", tipoUsuario);
-
+        SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
+        body.put("token", sharedPreferences.getString("token", null));
+        body.put("tipoUsuario", sharedPreferences.getString("tipoUsuario", null));
+        Toast.makeText(this, body.getString("token"), Toast.LENGTH_SHORT).show();
         rest.inicio(
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         TextView nombre = findViewById(R.id.nav_header_nombre);
-                        switch (tipoUsuario) {
-                            case 2:
-                                try {
-                                    Toast.makeText(Inicio.this, response.getString("nombre") + ", " + response.getString("curso"), Toast.LENGTH_SHORT).show();
-                                    nombre.setText(response.getString("nombre") + ", " + response.getString("curso"));
-                                } catch (JSONException e) {}
-                                break;
+                        try {
+                            nombre.setText(response.getString("nombre"));
+                        } catch (JSONException e) {}
 
-                            case 4:
-                                try {
-                                    nombre.setText(response.getString("nombre"));
-                                } catch (JSONException e) {}
-                                break;
-                        }
                     }
                 },
                 new Response.ErrorListener() {
