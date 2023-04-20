@@ -18,7 +18,6 @@ public class CustomRetryPolicy implements RetryPolicy {
         return MAX_RETRIES;
     }
 
-
     @Override
     public void retry(VolleyError error) throws VolleyError {
         // No reintenta automáticamente las solicitudes

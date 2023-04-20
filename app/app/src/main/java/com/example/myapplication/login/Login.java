@@ -70,7 +70,6 @@ public class Login extends Activity {
                                     SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
                                     sharedPreferences.edit().putString("token", response.getString("token")).apply();
                                     sharedPreferences.edit().putString("tipoUsuario", response.getString("tipoUsuario")).apply();
-                                    Toast.makeText(context, response.getString("token"), Toast.LENGTH_SHORT).show();
                                     Intent intent = new Intent(context, Inicio.class);
                                     startActivity(intent);
                                     finish();

@@ -26,7 +26,7 @@ public class Rest {
 
     private String ANDROID_LOCALHOST = "http://10.0.2.2:8000";
     private String PC_LOCALHOST = "http://192.168.245.231:8000";
-    private String BASE_URL = PC_LOCALHOST;
+    private String BASE_URL = ANDROID_LOCALHOST;
     private Context context;
     private RequestQueue queue;
 
