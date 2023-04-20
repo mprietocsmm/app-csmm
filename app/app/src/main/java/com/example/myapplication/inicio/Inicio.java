@@ -1,6 +1,9 @@
 package com.example.myapplication.inicio;
 
 import android.app.ActionBar;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,10 +21,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapplication.R;
+import com.example.myapplication.comunicaciones.Comunicaciones;
+import com.example.myapplication.login.Login;
 import com.example.myapplication.rest.Rest;
 import com.google.android.material.navigation.NavigationView;
 
@@ -32,17 +38,18 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private Rest rest = Rest.getInstance(this);
-    private int tipoUsuario = 4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_inicio);
+
         try {
             peticionInicio();
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
-        setContentView(R.layout.activity_inicio);
 
 
         Toolbar toolbar = findViewById(R.id.toolbar_main);
@@ -51,44 +58,39 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
         drawer = findViewById(R.id.drawer_layout);
 
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        //getSupportActionBar().setHomeAsUpIndicator(R.drawable.menu_icon);
 
         drawer.addDrawerListener(toggle);
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.blue)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
+        // Cambiar titulo de la ActionBar
+        getSupportActionBar().setTitle("Inicio");
 
         NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
 
         toggle.syncState();
+
+        // Configuración del elemento default para que aparezca al iniciarse la activity y salga check
+        onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_item_comunicaciones).setChecked(true));
     }
 
     private void peticionInicio() throws JSONException {
         JSONObject body = new JSONObject();
-        body.put("usuario", "ivangt");
-        body.put("tipoUsuario", tipoUsuario);
+        SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
+        body.put("token", sharedPreferences.getString("token", null));
+        body.put("tipoUsuario", sharedPreferences.getString("tipoUsuario", null));
 
         rest.inicio(
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         TextView nombre = findViewById(R.id.nav_header_nombre);
-                        switch (tipoUsuario) {
-                            case 2:
-                                try {
-                                    Toast.makeText(Inicio.this, response.getString("nombre") + ", " + response.getString("curso"), Toast.LENGTH_SHORT).show();
-                                    nombre.setText(response.getString("nombre") + ", " + response.getString("curso"));
-                                } catch (JSONException e) {}
-                                break;
+                        try {
+                            nombre.setText(response.getString("nombre"));
+                        } catch (JSONException e) {}
 
-                            case 4:
-                                try {
-                                    nombre.setText(response.getString("nombre"));
-                                } catch (JSONException e) {}
-                                break;
-                        }
                     }
                 },
                 new Response.ErrorListener() {
@@ -97,8 +99,10 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
 
                     }
                 },
-                body);
+                body
+        );
     }
+
     @Override
     public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
         super.onPostCreate(savedInstanceState, persistentState);
@@ -122,16 +126,46 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
+        Fragment fragment = null;
         switch (item.getItemId()) {
             case R.id.nav_item_inicio:
                 Toast.makeText(this, "Clicaste Inicio", Toast.LENGTH_LONG).show();
                 break;
             case R.id.nav_item_asignaturas:
                 Toast.makeText(this, "Clicaste Asignaturas", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_item_comunicaciones:
+                fragment = Comunicaciones.newInstance();
+                break;
+            case R.id.nav_item_cerrar_sesion:
+                SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
+
+                if (sharedPreferences.edit().remove("token").commit() == true && sharedPreferences.edit().remove("tipoUsuario").commit()) {
+                    Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, Login.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(this, "Error cerrando sesión", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
+
+        if (fragment != null) {
+            setFragment(fragment);
+        }
+
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void setFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                //.setCustomAnimations(R.anim.nav_enter, R.anim.nav_exit)
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
     @Override

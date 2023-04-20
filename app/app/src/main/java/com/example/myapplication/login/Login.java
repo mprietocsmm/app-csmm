@@ -1,6 +1,9 @@
 package com.example.myapplication.login;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +16,7 @@ import androidx.annotation.Nullable;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapplication.R;
+import com.example.myapplication.inicio.Inicio;
 import com.example.myapplication.rest.Rest;
 import com.squareup.picasso.Picasso;
 
@@ -24,12 +28,13 @@ public class Login extends Activity {
     private EditText email, contraseña;
     private Button inicioSesion;
     private Rest rest = Rest.getInstance(this);
+    private Context context = this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.blue));
         logo = findViewById(R.id.logo);
         Picasso.get().load(rest.getBASE_URL() + "/static/log_csmm.png").into(logo);
 
@@ -62,7 +67,13 @@ public class Login extends Activity {
                             @Override
                             public void onResponse(JSONObject response) {
                                 try {
-                                    Toast.makeText(Login.this, response.getString("message"), Toast.LENGTH_LONG).show();
+                                    SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
+                                    sharedPreferences.edit().putString("token", response.getString("token")).apply();
+                                    sharedPreferences.edit().putString("tipoUsuario", response.getString("tipoUsuario")).apply();
+                                    Toast.makeText(context, response.getString("token"), Toast.LENGTH_SHORT).show();
+                                    Intent intent = new Intent(context, Inicio.class);
+                                    startActivity(intent);
+                                    finish();
                                 } catch (JSONException e) {
                                     throw new RuntimeException(e);
                                 }

@@ -22,6 +22,7 @@ class Administradores(models.Model):
     ip = models.TextField()
     navegador = models.TextField()
     accesos = models.IntegerField()
+    token = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -42,6 +43,7 @@ class Alumnos(models.Model):
     ip = models.TextField()
     navegador = models.TextField()
     accesos = models.IntegerField()
+    token = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -112,6 +114,7 @@ class Familias(models.Model):
     navegador = models.TextField()
     accesos = models.IntegerField()
     fcm_token = models.TextField(blank=True, null=True)
+    token = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         managed = False
@@ -394,6 +397,7 @@ class Profesores(models.Model):
     ip = models.TextField()
     navegador = models.TextField()
     accesos = models.IntegerField()
+    token = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
         managed = False
