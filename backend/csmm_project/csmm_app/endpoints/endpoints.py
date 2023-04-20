@@ -70,21 +70,19 @@ def inicio(request):
 
     body = json.loads(request.body)
     usuario = busqueda_usuario_token(body['token'])
-    print(body['tipoUsuario'])
-    if body['tipoUsuario'] == 1:
+    if body['tipoUsuario'] == '1':
         return JsonResponse({
             "nombre": usuario[0].nombre + ' ' + usuario[0].apellido1 + ' ' + usuario[0].apellido2,
         }, status=200)
-    elif body['tipoUsuario'] == 2:
+    elif body['tipoUsuario'] == '2':
         return JsonResponse({
             "nombre": usuario[0].nombre + ' ' + usuario[0].apellido1 + ' ' + usuario[0].apellido2,
         }, status=200)
-    elif body['tipoUsuario'] == 3:
+    elif body['tipoUsuario'] == '3':
         return JsonResponse({
             "nombre": usuario[0].nombre + ' ' + usuario[0].apellido1 + ' ' + usuario[0].apellido2,
         }, status=200)
-    elif body['tipoUsuario'] == 4:
-        print('ENtró')
+    elif body['tipoUsuario'] == '4':
         return JsonResponse({
             "nombre": usuario[0].nombre + ' ' + usuario[0].apellido1 + ' ' + usuario[0].apellido2
         }, status=200)

@@ -52,5 +52,14 @@ def hijos(nombre):
         return Alumnos.objects.filter(alumnosfamilias__id_familia__in=padre)
 
     
-
-        
+def busqueda_usuario_id_tipo(id, tipo):
+    tipo = int(tipo)
+    id = int(id)
+    if tipo == 1:
+        return Administradores.objects.filter(id=id)
+    elif tipo == 2:
+        return Alumnos.objects.filter(id=id)
+    elif tipo == 3:
+        return Familias.objects.filter(id=id)
+    elif tipo == 4:
+        return Profesores.objects.filter(id=id)
