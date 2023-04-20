@@ -37,6 +37,9 @@
         <activity
             android:name=".comunicaciones.CrearComunicacion"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".comunicaciones.ComunicacionesCompletas"
+            android:screenOrientation="portrait"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

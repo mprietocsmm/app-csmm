@@ -75,7 +75,7 @@ public class CrearComunicacion extends AppCompatActivity {
                     body.put("fecha", sdf.format(new Date()));
                     body.put("destinatario", destinatarioTextInput.getText().toString());
                     body.put("asunto", asuntoTextInput.getText().toString());
-                    body.put("texto", mensajeTextInput.getText().toString());
+                    body.put("mensaje", mensajeTextInput.getText().toString());
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }

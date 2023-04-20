@@ -9,10 +9,12 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.myapplication.utils.CustomRetryPolicy;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -23,8 +25,8 @@ public class Rest {
     private static Rest INSTANCE;
 
     private String ANDROID_LOCALHOST = "http://10.0.2.2:8000";
-    private String PC_LOCALHOST = "http://127.0.0.1:8000";
-    private String BASE_URL = ANDROID_LOCALHOST;
+    private String PC_LOCALHOST = "http://192.168.245.231:8000";
+    private String BASE_URL = PC_LOCALHOST;
     private Context context;
     private RequestQueue queue;
 
@@ -63,7 +65,7 @@ public class Rest {
                 body,
                 onResponse,
                 onErrorResponse
-        ));
+        ).setRetryPolicy(new CustomRetryPolicy()));
     }
 
     public void login(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
@@ -99,6 +101,29 @@ public class Rest {
         )).setRetryPolicy(new CustomRetryPolicy());
     }
 
+    public void getComunicaciones(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonArrayRequest(
+                Request.Method.GET,
+                BASE_URL + "/comunicaciones",
+                null,
+                onResponse,
+                onErrorResponse
+        ) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                SharedPreferences preferences = context.getSharedPreferences("usuario", Context.MODE_PRIVATE);
+                String sessionToken = preferences.getString("token", null);
+                String tipoUsuario = preferences.getString("tipoUsuario", null);
+
+                HashMap<String, String> myHeaders = new HashMap<>();
+                myHeaders.put("token", sessionToken);
+                myHeaders.put("tipoUsuario", tipoUsuario);
+                return myHeaders;
+            }
+        });
+    }
+
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 
@@ -116,9 +141,11 @@ public class Rest {
         public Map<String, String> getHeaders() throws AuthFailureError {
             SharedPreferences preferences = context.getSharedPreferences("usuario", Context.MODE_PRIVATE);
             String sessionToken = preferences.getString("token", null);
+            String tipoUsuario = preferences.getString("tipoUsuario", null);
 
             HashMap<String, String> myHeaders = new HashMap<>();
             myHeaders.put("token", sessionToken);
+            myHeaders.put("tipoUsuario", tipoUsuario);
             return myHeaders;
         }
     }

@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapplication.R;
 import com.example.myapplication.comunicaciones.Comunicaciones;
+import com.example.myapplication.login.Login;
 import com.example.myapplication.rest.Rest;
 import com.google.android.material.navigation.NavigationView;
 
@@ -37,7 +38,6 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private Rest rest = Rest.getInstance(this);
-    private int tipoUsuario = 4;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
         SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
         body.put("token", sharedPreferences.getString("token", null));
         body.put("tipoUsuario", sharedPreferences.getString("tipoUsuario", null));
-        Toast.makeText(this, body.getString("token"), Toast.LENGTH_SHORT).show();
+
         rest.inicio(
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -99,7 +99,8 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
 
                     }
                 },
-                body);
+                body
+        );
     }
 
     @Override
@@ -136,7 +137,18 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
             case R.id.nav_item_comunicaciones:
                 fragment = Comunicaciones.newInstance();
                 break;
-                
+            case R.id.nav_item_cerrar_sesion:
+                SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
+
+                if (sharedPreferences.edit().remove("token").commit() == true && sharedPreferences.edit().remove("tipoUsuario").commit()) {
+                    Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, Login.class);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    Toast.makeText(this, "Error cerrando sesión", Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
 
         if (fragment != null) {

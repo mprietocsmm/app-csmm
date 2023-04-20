@@ -5,7 +5,9 @@
         <item name="android:windowSplashScreenBackground">#134FAB</item>
         <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
         <item name="android:windowFullscreen">true</item>
+        <!--
         <item name="android:windowEnterTransition">@android:anim/fade_in</item>
         <item name="android:windowExitTransition">@android:anim/fade_out</item>
+        -->
     </style>
 </resources>
