@@ -13,7 +13,7 @@
        app:layout_constraintTop_toTopOf="parent"
        android:background="?attr/colorPrimary"
        android:minHeight="?attr/actionBarSize"
-       android:theme="?attr/actionBarTheme"
+       android:theme="@style/AppTheme.AppBarOverlay"
        app:layout_anchorGravity="center">
 
 
@@ -76,7 +76,7 @@
    <Button
        android:id="@+id/enviarButton"
        android:layout_width="215dp"
-       android:layout_height="70dp"
+       android:layout_height="50dp"
        android:layout_marginBottom="200dp"
        android:text="Enviar"
        android:textSize="18dp"

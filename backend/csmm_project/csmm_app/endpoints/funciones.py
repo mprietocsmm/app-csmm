@@ -50,6 +50,11 @@ def hijos(nombre):
     padre = Familias.objects.filter(usuario=nombre)
     if padre.count() != 0:
         return Alumnos.objects.filter(alumnosfamilias__id_familia__in=padre)
+    
+def hijos_token(token):
+    padre = Familias.objects.filter(token=token)
+    if padre.count() != 0:
+        return Alumnos.objects.filter(alumnosfamilias__id_familia__in=padre)
 
     
 def busqueda_usuario_id_tipo(id, tipo):

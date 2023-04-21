@@ -12,5 +12,8 @@
     <color name="grey_500">#4D808080</color>
     <color name="blue">#134FAB</color>
     <color name="blue_700">#1F7FDC</color>
+    <color name="blue_500">#29a0fd</color>
+    <color name="blue_300">#69bdfd</color>
+    <color name="blue_50">#e4f3fe</color>
     <color name="red">#DE3B26</color>
 </resources>

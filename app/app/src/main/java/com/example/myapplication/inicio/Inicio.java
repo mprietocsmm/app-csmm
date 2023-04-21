@@ -37,6 +37,7 @@ import org.json.JSONObject;
 public class Inicio extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
+    private TextView nombre;
     private Rest rest = Rest.getInstance(this);
 
     @Override
@@ -45,35 +46,38 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
 
         setContentView(R.layout.activity_inicio);
 
-        try {
-            peticionInicio();
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-
-
         Toolbar toolbar = findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
 
         drawer = findViewById(R.id.drawer_layout);
-
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawer.addDrawerListener(toggle);
 
+
+
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.blue));
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
+
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getColor(R.color.blue)));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-        // Cambiar titulo de la ActionBar
-        getSupportActionBar().setTitle("Inicio");
 
         NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
+        View headerView = navigationView.getHeaderView(0);
+        nombre = (TextView) headerView.findViewById(R.id.nav_header_nombre);
 
         toggle.syncState();
 
         // Configuración del elemento default para que aparezca al iniciarse la activity y salga check
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_item_comunicaciones).setChecked(true));
+
+        try {
+            peticionInicio();
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private void peticionInicio() throws JSONException {
@@ -86,7 +90,6 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        TextView nombre = findViewById(R.id.nav_header_nombre);
                         try {
                             nombre.setText(response.getString("nombre"));
                         } catch (JSONException e) {}
@@ -151,6 +154,7 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
                 break;
         }
 
+        getSupportActionBar().setTitle(item.getTitle());
         if (fragment != null) {
             setFragment(fragment);
         }
