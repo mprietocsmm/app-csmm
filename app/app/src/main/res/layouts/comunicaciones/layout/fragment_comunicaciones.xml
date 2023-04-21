@@ -52,7 +52,7 @@
         android:focusable="true"
         android:tint="@color/white"
         android:clickable="true"
-        android:backgroundTint="?attr/colorPrimary" />
+        android:backgroundTint="@color/blue_700"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/botonNuevoComunicado"
@@ -63,7 +63,7 @@
         app:layout_constraintBottom_toTopOf="@+id/botonDesplegable"
         app:layout_constraintEnd_toEndOf="@+id/botonDesplegable"
         app:srcCompat="@drawable/edit_icon"
-        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:backgroundTint="@color/blue_500"
         android:visibility="gone"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -75,7 +75,7 @@
         app:layout_constraintBottom_toTopOf="@+id/botonNuevoComunicado"
         app:layout_constraintEnd_toEndOf="@+id/botonDesplegable"
         app:srcCompat="@drawable/check_icon"
-        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:backgroundTint="@color/blue_500"
         android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

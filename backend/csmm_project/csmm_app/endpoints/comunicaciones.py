@@ -52,11 +52,26 @@ def comunicaciones(request):
         for comunicacion in comunicaciones:
             remitente = busqueda_usuario_id_tipo(comunicacion.idremite, comunicacion.tiporemite)
             response.append(
-                {"asunto": comunicacion.asunto,
-                 "mensaje": comunicacion.texto,
-                 "remitente": remitente[0].nombre + " " + remitente[0].apellido1 + " " + remitente[0].apellido2
-                 }
+                {
+                    "asunto": comunicacion.asunto,
+                    "mensaje": comunicacion.texto,
+                    "remitente": remitente[0].nombre + " " + remitente[0].apellido1 + " " + remitente[0].apellido2
+                }
             )
         return JsonResponse(response, safe=False, status=200)
     else:
         return JsonResponse({"error": "Método HTTP no soportado"}, status=405)
+
+
+def get_contactos(request):
+    body = json.loads(request.body)
+
+    try:
+        token = body['token']
+        tipo = body['tipoUsuario']
+    except KeyError:
+        return JsonResponse({"error": "Faltan parámetros"}, status=400)
+    
+    if tipo == 4:
+        for hijo in hijos_token(token):
+            pass

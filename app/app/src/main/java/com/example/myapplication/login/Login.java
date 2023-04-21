@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,6 +19,8 @@ import com.android.volley.VolleyError;
 import com.example.myapplication.R;
 import com.example.myapplication.inicio.Inicio;
 import com.example.myapplication.rest.Rest;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -25,7 +28,8 @@ import org.json.JSONObject;
 
 public class Login extends Activity {
     private ImageView logo;
-    private EditText email, contraseña;
+    private TextInputLayout usuarioLayout, contraseñaLayout;
+    private TextInputEditText usuario, contraseña;
     private Button inicioSesion;
     private Rest rest = Rest.getInstance(this);
     private Context context = this;
@@ -38,25 +42,33 @@ public class Login extends Activity {
         logo = findViewById(R.id.logo);
         Picasso.get().load(rest.getBASE_URL() + "/static/log_csmm.png").into(logo);
 
-        email = findViewById(R.id.emailEditText);
+        getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
+        //getWindow().setStatusBarColor(getResources().getColor(R.color.white));
 
-        contraseña = findViewById(R.id.constraseñaEditText);
+        usuario = findViewById(R.id.usuarioTextInput);
+        usuarioLayout = findViewById(R.id.usuarioTextInputLayout);
 
-        inicioSesion = findViewById(R.id.inicioSesionBoton);
+        contraseña = findViewById(R.id.contraseñaTextInput);
+        contraseñaLayout = findViewById(R.id.contraseñaTextInputLayout);
+        inicioSesion = findViewById(R.id.botonMaterialButton);
         inicioSesion.setOnClickListener(inicioSesionListener);
     }
 
     View.OnClickListener inicioSesionListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (email.getText().length() <= 0) {
-                email.setError("Campo obligatorio");
+            usuarioLayout.setHelperText("");
+            contraseñaLayout.setHelperText("");
+            if (usuario.getText().length() <= 0) {
+                usuarioLayout.setError("");
+                usuarioLayout.setHelperText("Campo obligatorio");
             } else if (contraseña.getText().length() <= 0) {
-                contraseña.setError("Campo obligatorio");
+                contraseñaLayout.setError("");
+                contraseñaLayout.setHelperText("Campo obligatorio");
             } else {
                 JSONObject body = new JSONObject();
                 try {
-                    body.put("email", email.getText().toString());
+                    body.put("email", usuario.getText().toString());
                     body.put("contraseña", contraseña.getText().toString());
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -81,7 +93,13 @@ public class Login extends Activity {
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(Login.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                                if (error.networkResponse.statusCode == 403) {
+                                    contraseñaLayout.setError("");
+                                    contraseñaLayout.setHelperText("Contraseña incorrecta");
+                                } else if (error.networkResponse.statusCode == 404) {
+                                    usuarioLayout.setError("");
+                                    usuarioLayout.setHelperText("Usuario no registrado");
+                                }
                             }
                         },
                         body
