@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -29,8 +30,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class CrearComunicacion extends AppCompatActivity {
-    private Button enviarButton;
-    private TextInputEditText destinatarioTextInput, asuntoTextInput, mensajeTextInput;
+    private Button enviarButton, botonDestinatario;
+    private TextInputEditText asuntoTextInput, mensajeTextInput;
     private Toolbar toolbar;
     private Context context = this;
 
@@ -45,7 +46,8 @@ public class CrearComunicacion extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        destinatarioTextInput = findViewById(R.id.destinatarioTextInput);
+        botonDestinatario = findViewById(R.id.botonDestinatario);
+        botonDestinatario.setOnClickListener(destinatarioListener);
         asuntoTextInput = findViewById(R.id.asuntoTextInput);
         mensajeTextInput = findViewById(R.id.mensajeTextInput);
 
@@ -56,9 +58,7 @@ public class CrearComunicacion extends AppCompatActivity {
     View.OnClickListener enviarListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            if (destinatarioTextInput.getText().length() < 1) {
-                destinatarioTextInput.setError("Campo obligatorio");
-            } else if (asuntoTextInput.getText().length() < 1) {
+            if (asuntoTextInput.getText().length() < 1) {
                 asuntoTextInput.setError("Campo obligatorio");
             } else if (mensajeTextInput.getText().length() < 1) {
                 mensajeTextInput.setError("Campo obligatorio");
@@ -73,7 +73,7 @@ public class CrearComunicacion extends AppCompatActivity {
                     body.put("tiporemite", sharedPreferences.getString("tipoUsuario", null));
                     body.put("token", sharedPreferences.getString("token", null));
                     body.put("fecha", sdf.format(new Date()));
-                    body.put("destinatario", destinatarioTextInput.getText().toString());
+                    //body.put("destinatario", destinatarioTextInput.getText().toString());
                     body.put("asunto", asuntoTextInput.getText().toString());
                     body.put("mensaje", mensajeTextInput.getText().toString());
                 } catch (JSONException e) {
@@ -98,6 +98,15 @@ public class CrearComunicacion extends AppCompatActivity {
                         body
                 );
             }
+        }
+    };
+
+    View.OnClickListener destinatarioListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            FragmentManager fm = getSupportFragmentManager();
+            DestinatarioDialog alertDialog = DestinatarioDialog.newInstance();
+            alertDialog.show(fm, "fragment_alert");
         }
     };
 

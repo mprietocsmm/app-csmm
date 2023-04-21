@@ -19,7 +19,21 @@
 
    </androidx.appcompat.widget.Toolbar>
 
-   <com.google.android.material.textfield.TextInputLayout
+   <Button
+       android:id="@+id/botonDestinatario"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       app:layout_constraintTop_toBottomOf="@+id/toolbar"
+       android:layout_marginHorizontal="45dp"
+       android:layout_marginTop="50dp"
+       android:text="DESTINATARIO">
+
+
+
+   </Button>
+
+   <!--
+     <com.google.android.material.textfield.TextInputLayout
        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
        android:id="@+id/destinatarioTextInputLayout"
        android:layout_width="match_parent"
@@ -38,13 +52,13 @@
           android:hint="Destinatario" />
 
    </com.google.android.material.textfield.TextInputLayout>
-
+   -->
    <com.google.android.material.textfield.TextInputLayout
        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
        android:id="@+id/asuntoTextInputLayout"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       app:layout_constraintTop_toBottomOf="@+id/destinatarioTextInputLayout"
+       app:layout_constraintTop_toBottomOf="@+id/botonDestinatario"
        android:layout_marginHorizontal="32dp"
        android:layout_marginTop="50dp"
        android:hint="Asunto">
