@@ -28,7 +28,9 @@ import com.android.volley.VolleyError;
 import com.example.myapplication.R;
 import com.example.myapplication.comunicaciones.Comunicaciones;
 import com.example.myapplication.login.Login;
+import com.example.myapplication.perfil.Perfil;
 import com.example.myapplication.rest.Rest;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONException;
@@ -66,12 +68,14 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
         NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
+        headerView.setOnClickListener(headerListener);
         nombre = (TextView) headerView.findViewById(R.id.nav_header_nombre);
 
         toggle.syncState();
 
         // Configuración del elemento default para que aparezca al iniciarse la activity y salga check
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_item_comunicaciones).setChecked(true));
+        SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
 
         try {
             peticionInicio();
@@ -85,7 +89,6 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
         SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
         body.put("token", sharedPreferences.getString("token", null));
         body.put("tipoUsuario", sharedPreferences.getString("tipoUsuario", null));
-
         rest.inicio(
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -180,4 +183,12 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
             super.onBackPressed();
         }
     }
+    
+    View.OnClickListener headerListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(Inicio.this, Perfil.class);
+            startActivity(intent);
+        }
+    };
 }

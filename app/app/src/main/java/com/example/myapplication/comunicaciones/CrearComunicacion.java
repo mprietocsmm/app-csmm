@@ -106,6 +106,4 @@ public class CrearComunicacion extends AppCompatActivity {
         onBackPressed();
         return true;
     }
-
-
 }

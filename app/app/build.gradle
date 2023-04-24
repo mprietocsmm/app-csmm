@@ -33,6 +33,7 @@ android {
                     'src/main/res/layouts/login',
                     'src/main/res/layouts/inicio',
                     'src/main/res/layouts/comunicaciones',
+                    'src/main/res/layouts/perfil',
                     'src/main/res/layouts',
                     'src/main/res'
             ]
@@ -41,7 +42,6 @@ android {
 }
 
 dependencies {
-
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'

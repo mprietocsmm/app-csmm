@@ -25,7 +25,7 @@ public class Rest {
     private static Rest INSTANCE;
 
     private String ANDROID_LOCALHOST = "http://10.0.2.2:8000";
-    private String PC_LOCALHOST = "http://192.168.245.231:8000";
+    private String PC_LOCALHOST = "http://192.168.82.231:8000";
     private String BASE_URL = ANDROID_LOCALHOST;
     private Context context;
     private RequestQueue queue;
@@ -124,6 +124,27 @@ public class Rest {
         });
     }
 
+    public void getAjustes(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/perfil",
+                body,
+                onResponse,
+                onErrorResponse
+        )).setRetryPolicy(new CustomRetryPolicy());
+    }
+
+    public void setAjustes(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/ajustes",
+                body,
+                onResponse,
+                onErrorResponse
+        )).setRetryPolicy(new CustomRetryPolicy());
+    }
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 

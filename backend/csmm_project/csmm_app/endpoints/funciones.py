@@ -68,3 +68,4 @@ def busqueda_usuario_id_tipo(id, tipo):
         return Familias.objects.filter(id=id)
     elif tipo == 4:
         return Profesores.objects.filter(id=id)
+    
