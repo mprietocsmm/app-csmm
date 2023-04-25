@@ -104,9 +104,7 @@ public class CrearComunicacion extends AppCompatActivity {
     View.OnClickListener destinatarioListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            FragmentManager fm = getSupportFragmentManager();
-            DestinatarioDialog alertDialog = DestinatarioDialog.newInstance();
-            alertDialog.show(fm, "fragment_alert");
+
         }
     };
 

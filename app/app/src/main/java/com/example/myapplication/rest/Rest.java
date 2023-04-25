@@ -124,6 +124,17 @@ public class Rest {
         });
     }
 
+    public void getContactos(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonArrayRequest(
+                Request.Method.GET,
+                BASE_URL + "/comunicaciones",
+                null,
+                onResponse,
+                onErrorResponse
+        ));
+    }
+
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 

@@ -72,6 +72,9 @@ def get_contactos(request):
     except KeyError:
         return JsonResponse({"error": "Faltan parámetros"}, status=400)
     
+    response = ['PAS', 'Equipo informático', 'Dirección']
     if tipo == 4:
         for hijo in hijos_token(token):
-            pass
+            response.append(hijo.nombre)
+            
+    return JsonResponse(response, status=200, safe=False)
