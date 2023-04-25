@@ -1,6 +1,7 @@
 package com.example.myapplication.comunicaciones;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.Menu;
@@ -104,7 +105,8 @@ public class CrearComunicacion extends AppCompatActivity {
     View.OnClickListener destinatarioListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
+            Intent intent = new Intent(CrearComunicacion.this, Destinatario.class);
+            startActivity(intent);
         }
     };
 

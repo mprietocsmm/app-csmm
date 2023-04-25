@@ -64,17 +64,18 @@ def comunicaciones(request):
 
 
 def get_contactos(request):
-    body = json.loads(request.body)
 
     try:
-        token = body['token']
-        tipo = body['tipoUsuario']
+        token = request.headers['token']
+        tipo = int(request.headers['tipoUsuario'])
     except KeyError:
         return JsonResponse({"error": "Faltan parámetros"}, status=400)
     
     response = ['PAS', 'Equipo informático', 'Dirección']
-    if tipo == 4:
-        for hijo in hijos_token(token):
+    if tipo == 3:
+        hijos = hijos_token(token)
+        
+        for hijo in hijos:
             response.append(hijo.nombre)
             
     return JsonResponse(response, status=200, safe=False)

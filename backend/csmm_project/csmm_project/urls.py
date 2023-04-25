@@ -24,4 +24,5 @@ urlpatterns = [
     path('inicio', endpoints.inicio),
     path('comunicaciones', comunicaciones.comunicaciones),
     path('autenticar', launcher.authenticate),
+    path('contactos', comunicaciones.get_contactos),
 ]
