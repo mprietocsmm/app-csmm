@@ -72,10 +72,20 @@ def get_contactos(request):
         return JsonResponse({"error": "Faltan parámetros"}, status=400)
     
     response = ['PAS', 'Equipo informático', 'Dirección']
-    if tipo == 3:
+
+    if tipo == 1:
+        pass
+
+    elif tipo == 2:
+        pass
+    
+    elif tipo == 3:
         hijos = hijos_token(token)
         
         for hijo in hijos:
             response.append(hijo.nombre)
+
+    elif tipo == 4:
+        pass
             
     return JsonResponse(response, status=200, safe=False)

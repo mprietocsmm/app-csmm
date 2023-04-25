@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import java.util.List;
 public class Destinatario extends AppCompatActivity {
     private Toolbar toolbar;
     private ListView listView;
+    private Button botonConfirmar;
     private List<Boolean> checked = new ArrayList<>();
     private Context context = this;
     @Override
@@ -42,7 +44,10 @@ public class Destinatario extends AppCompatActivity {
 
         listView = findViewById(R.id.list_view_destinatario);
         listView.setOnItemClickListener(itemClickListener);
-        Toast.makeText(context, String.valueOf(checked.size()), Toast.LENGTH_SHORT).show();
+
+        botonConfirmar = findViewById(R.id.boton_confirmar);
+        botonConfirmar.setOnClickListener(confirmarListener);
+
         if (checked.size() < 1)
             llenarLista();
     }
@@ -79,6 +84,13 @@ public class Destinatario extends AppCompatActivity {
         );
     }
 
+    View.OnClickListener confirmarListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+        }
+    };
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -102,11 +114,5 @@ public class Destinatario extends AppCompatActivity {
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
-    }
-
-    @Override
-    public void onBackPressed() {
-        moveTaskToBack(false);
-        return;
     }
 }
