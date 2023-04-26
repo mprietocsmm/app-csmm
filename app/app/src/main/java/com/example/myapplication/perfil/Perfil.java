@@ -112,6 +112,10 @@ public class Perfil extends AppCompatActivity {
         public void onClick(View v) {
             Rest rest = Rest.getInstance(context);
             JSONObject body = new JSONObject();
+            List<Boolean> lista = new ArrayList<>();
+
+            System.out.println(listView.getCheckedItemPositions());
+
             rest.setAjustes(
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -130,11 +134,7 @@ public class Perfil extends AppCompatActivity {
         }
     };
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
-        return true;
-    }
+
 
     @Override
     public boolean onSupportNavigateUp() {

@@ -139,7 +139,7 @@ public class Rest {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonObjectRequest(
                 Request.Method.POST,
-                BASE_URL + "/ajustes",
+                BASE_URL + "/perfil",
                 body,
                 onResponse,
                 onErrorResponse

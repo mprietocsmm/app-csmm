@@ -187,8 +187,13 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
     View.OnClickListener headerListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(Inicio.this, Perfil.class);
-            startActivity(intent);
+            SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
+            String tipoUsuario = sharedPreferences.getString("tipoUsuario", null);
+
+            if (tipoUsuario.equals("3")) {
+                Intent intent = new Intent(Inicio.this, Perfil.class);
+                startActivity(intent);
+            }
         }
     };
 }
