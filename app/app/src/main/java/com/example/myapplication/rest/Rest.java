@@ -124,25 +124,27 @@ public class Rest {
         });
     }
 
-    public void getAjustes(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
+    public void getAjustes(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse) {
         queue = Volley.newRequestQueue(context);
-        queue.add(new JsonObjectRequest(
-                Request.Method.POST,
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.GET,
                 BASE_URL + "/perfil",
-                body,
+                null,
                 onResponse,
-                onErrorResponse
+                onErrorResponse,
+                context
         )).setRetryPolicy(new CustomRetryPolicy());
     }
 
     public void setAjustes(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
         queue = Volley.newRequestQueue(context);
-        queue.add(new JsonObjectRequest(
+        queue.add(new JsonObjectRequestWithCustomAuth(
                 Request.Method.POST,
                 BASE_URL + "/perfil",
                 body,
                 onResponse,
-                onErrorResponse
+                onErrorResponse,
+                context
         )).setRetryPolicy(new CustomRetryPolicy());
     }
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {

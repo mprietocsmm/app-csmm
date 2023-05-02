@@ -3,6 +3,7 @@ package com.example.myapplication.perfil;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,14 +64,6 @@ public class Perfil extends AppCompatActivity {
         List<Boolean> lista = new ArrayList<>();
 
         JSONObject body = new JSONObject();
-        SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
-        try {
-            body.put("token", sharedPreferences.getString("token", null));
-            body.put("tipoUsuario", sharedPreferences.getString("tipoUsuario", null));
-            System.out.println(body);
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
         Rest rest = Rest.getInstance(this);
 
         rest.getAjustes(
@@ -102,8 +95,7 @@ public class Perfil extends AppCompatActivity {
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(Perfil.this, "Error: " + error.networkResponse.toString(), Toast.LENGTH_SHORT).show();
                     }
-                },
-                body
+                }
         );
     }
 
@@ -113,14 +105,41 @@ public class Perfil extends AppCompatActivity {
             Rest rest = Rest.getInstance(context);
             JSONObject body = new JSONObject();
             List<Boolean> lista = new ArrayList<>();
-
             System.out.println(listView.getCheckedItemPositions());
+            SparseBooleanArray booleanArray = listView.getCheckedItemPositions();
+
+            for (int i=0; i<11; i++)
+                System.out.println(adapter.getItem(i));
+
+            try {
+                body.put("autentificacion_dos_fases", adapter.getItem(0));
+                body.put("proteccion_restablecimiento", adapter.getItem(1));
+                body.put("not_calificaciones_push", adapter.getItem(2));
+                body.put("not_comunicaciones_push", adapter.getItem(3));
+                body.put("not_entrevistas_push", adapter.getItem(4));
+                body.put("not_extraescolares_push", adapter.getItem(5));
+                body.put("not_enfermeria_push", adapter.getItem(6));
+                body.put("not_calificaciones_email", adapter.getItem(7));
+                body.put("not_comunicaciones_email", adapter.getItem(8));
+                body.put("not_entrevistas_email", adapter.getItem(9));
+                body.put("not_extraescolares_email", adapter.getItem(10));
+                body.put("not_enfermeria_email", adapter.getItem(11));
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
 
             rest.setAjustes(
                     new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
+                            try {
+                                Toast.makeText(Perfil.this, response.getString("mensaje"), Toast.LENGTH_SHORT).show();
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
 
+                            onBackPressed();
+                            finish();
                         }
                     },
                     new Response.ErrorListener() {

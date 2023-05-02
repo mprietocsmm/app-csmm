@@ -26,6 +26,8 @@ public class PerfilAdapter extends ArrayAdapter {
 
         this.context = context;
         this.items = objects;
+        for (int i=0; i<items.size(); i++)
+            items.get(i);
         this.checked = checked;
     }
 
@@ -40,5 +42,11 @@ public class PerfilAdapter extends ArrayAdapter {
         textView.setText(items.get(position));
         switchAjustes.setChecked(checked.get(position));
         return convertView;
+    }
+
+    @Nullable
+    @Override
+    public Boolean getItem(int position) {
+        return checked.get(position);
     }
 }
