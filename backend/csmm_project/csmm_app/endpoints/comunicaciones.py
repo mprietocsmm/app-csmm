@@ -15,12 +15,15 @@ def comunicaciones(request):
             tipo_remite = body['tiporemite']
             token_remitente = body['token']
             fecha = body['fecha']
-            destinatario = body['destinatario']
+            destinatarios = body['destinatarios']
             asunto = body['asunto']
             texto = body['mensaje']
         except KeyError:
             return JsonResponse({"error": "Faltan parámetros"}, status=400)
 
+        for destinatario in destinatarios:
+            pass
+        
         remitente = busqueda_usuario_token_tipo(token_remitente, tipo_remite)
         comunicacion = Comunicaciones(tiporemite=tipo_remite, idremite=remitente[0].id, fecha=fecha, asunto=asunto,
                                       texto=texto)
@@ -83,7 +86,7 @@ def get_contactos(request):
         hijos = hijos_token(token)
         
         for hijo in hijos:
-            response.append(hijo.nombre)
+            response.append({"id": hijo.id, "nombre": hijo.nombre, "tipoUsuario": 3})
 
     elif tipo == 4:
         pass

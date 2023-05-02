@@ -23,6 +23,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.rest.Rest;
 import com.google.android.material.textfield.TextInputEditText;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,8 +35,9 @@ public class CrearComunicacion extends AppCompatActivity {
     private Button enviarButton, botonDestinatario;
     private TextInputEditText asuntoTextInput, mensajeTextInput;
     private Toolbar toolbar;
+    private JSONArray destinatarios;
     private Context context = this;
-
+    private Bundle extras;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,12 @@ public class CrearComunicacion extends AppCompatActivity {
 
         enviarButton = findViewById(R.id.enviarButton);
         enviarButton.setOnClickListener(enviarListener);
+
+        if (savedInstanceState != null) {
+            asuntoTextInput.setText(savedInstanceState.getString("asunto"));
+            mensajeTextInput.setText(savedInstanceState.getString("mensaje"));
+        }
+            
     }
 
     View.OnClickListener enviarListener = new View.OnClickListener() {
@@ -101,6 +109,23 @@ public class CrearComunicacion extends AppCompatActivity {
             }
         }
     };
+
+    private JSONArray getDestinatarios() {
+        SharedPreferences sharedPreferences = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
+        JSONArray array = new JSONArray();
+        if (sharedPreferences.getString("destinatarios", null) != null) {
+            try {
+                destinatarios = new JSONObject(sharedPreferences.getString("destinatarios", null)).getJSONArray("destinatarios");
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
+
+
+        }
+
+        return array;
+    }
 
     View.OnClickListener destinatarioListener = new View.OnClickListener() {
         @Override

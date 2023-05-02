@@ -1,12 +1,17 @@
 package com.example.myapplication.comunicaciones;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -21,6 +26,7 @@ import com.example.myapplication.rest.Rest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +34,10 @@ import java.util.List;
 public class Destinatario extends AppCompatActivity {
     private Toolbar toolbar;
     private ListView listView;
-    private Button botonConfirmar;
+    private ImageView checkButton;
     private List<Boolean> checked = new ArrayList<>();
+    private ListAdapter adapter;
+    private ConfirmarListener listener;
     private Context context = this;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,10 +51,9 @@ public class Destinatario extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         listView = findViewById(R.id.list_view_destinatario);
-        listView.setOnItemClickListener(itemClickListener);
 
-        botonConfirmar = findViewById(R.id.boton_confirmar);
-        botonConfirmar.setOnClickListener(confirmarListener);
+        checkButton = findViewById(R.id.tickToolbar);
+        checkButton.setOnClickListener(confirmarListener);
 
         if (checked.size() < 1)
             llenarLista();
@@ -70,8 +77,9 @@ public class Destinatario extends AppCompatActivity {
                                 throw new RuntimeException(e);
                             }
                         }
-
-                        listView.setAdapter(new ArrayAdapter<>(context, android.R.layout.simple_list_item_multiple_choice, array));
+                        adapter = new DestinatarioAdapter(context, array);
+                        listener = (ConfirmarListener) adapter;
+                        listView.setAdapter(adapter);
                     }
                 },
                 new Response.ErrorListener() {
@@ -87,26 +95,32 @@ public class Destinatario extends AppCompatActivity {
     View.OnClickListener confirmarListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
+            Boolean[] checkedArray = new Boolean[listener.checkedLenght()];
+            checkedArray = listener.confirmarListener();
+            JSONArray array  = new JSONArray();
 
-        }
-    };
+            for (int i=0; i<checkedArray.length; i++) {
+                JSONObject object = new JSONObject();
+                try {
+                    object.put("nombre", adapter.getItem(i));
+                    object.put("checked", checkedArray[i]);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+                array.put(object);
+            }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Toast.makeText(context, "OnResume", Toast.LENGTH_SHORT).show();
-    }
+            JSONObject destinatarios = new JSONObject();
+            try {
+                destinatarios.put("destinatarios", array);
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Toast.makeText(context, "OnRestart", Toast.LENGTH_SHORT).show();
-    }
-
-    AdapterView.OnItemClickListener itemClickListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            checked.set(position, !checked.get(position));
+            SharedPreferences sharedPreferences = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
+            sharedPreferences.edit().putString("destinatarios", destinatarios.toString());
+            onBackPressed();
+            finish();
         }
     };
 
@@ -115,4 +129,6 @@ public class Destinatario extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
+
 }
