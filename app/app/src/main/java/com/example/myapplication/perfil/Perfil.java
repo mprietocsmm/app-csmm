@@ -86,6 +86,7 @@ public class Perfil extends AppCompatActivity {
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
+
                         adapter = new PerfilAdapter(context, listItem, lista);
                         listView.setAdapter(adapter);
                     }
@@ -104,12 +105,6 @@ public class Perfil extends AppCompatActivity {
         public void onClick(View v) {
             Rest rest = Rest.getInstance(context);
             JSONObject body = new JSONObject();
-            List<Boolean> lista = new ArrayList<>();
-            System.out.println(listView.getCheckedItemPositions());
-            SparseBooleanArray booleanArray = listView.getCheckedItemPositions();
-
-            for (int i=0; i<11; i++)
-                System.out.println(adapter.getItem(i));
 
             try {
                 body.put("autentificacion_dos_fases", adapter.getItem(0));

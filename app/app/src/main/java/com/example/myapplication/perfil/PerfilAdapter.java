@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class PerfilAdapter extends ArrayAdapter {
 
         this.context = context;
         this.items = objects;
+
         for (int i=0; i<items.size(); i++)
             items.get(i);
         this.checked = checked;
@@ -39,6 +41,12 @@ public class PerfilAdapter extends ArrayAdapter {
         TextView textView = convertView.findViewById(R.id.textView);
         Switch switchAjustes = convertView.findViewById(R.id.switchAjustes);
 
+        switchAjustes.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                checked.set(position, isChecked);
+            }
+        });
         textView.setText(items.get(position));
         switchAjustes.setChecked(checked.get(position));
         return convertView;
@@ -49,4 +57,6 @@ public class PerfilAdapter extends ArrayAdapter {
     public Boolean getItem(int position) {
         return checked.get(position);
     }
+
+
 }
