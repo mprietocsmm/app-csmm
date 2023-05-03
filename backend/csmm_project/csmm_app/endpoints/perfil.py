@@ -46,21 +46,36 @@ def perfil(request):
         except KeyError:
             return JsonResponse({"error": "Faltan parámetros"}, status=400)
         
-        ajustes = FamiliasAppAjustes.objects.get(id_usuario__id=busqueda_usuario_token_tipo(token, tipo)[0].id)
-        ajustes.autentificacion_dos_fases = int(body['autentificacion_dos_fases'] == True)   
-        ajustes.proteccion_restablecimiento = int(body['proteccion_restablecimiento'] == True)
-        ajustes.not_comunicaciones_push = int(body['not_comunicaciones_push'] == True)
-        ajustes.not_calificaciones_push = int(body['not_calificaciones_push'] == True)
-        ajustes.not_entrevistas_push = int(body['not_entrevistas_push'] == True)
-        ajustes.not_extraescolares_push = int(body['not_extraescolares_push'] == True)
-        ajustes.not_enfermeria_push = int(body['not_enfermeria_push'] == True)
-        ajustes.not_comunicaciones_email = int(body['not_comunicaciones_email'] == True)
-        ajustes.not_calificaciones_email = int(body['not_calificaciones_email'] == True)
-        ajustes.not_entrevistas_email = int(body['not_entrevistas_email'] == True)
-        ajustes.not_extraescolares_email = int(body['not_extraescolares_email'] == True)
-        ajustes.not_enfermeria_email = int(body['not_enfermeria_email'] == True)
+        ajustes = FamiliasAppAjustes.objects.filter(id_usuario__id=busqueda_usuario_token_tipo(token, tipo)[0].id).update(
+            autentificacion_dos_fases=boolean_to_int(body['autentificacion_dos_fases']),
+            proteccion_restablecimiento = boolean_to_int(body['proteccion_restablecimiento']),
+            not_comunicaciones_push = boolean_to_int(body['not_comunicaciones_push']),
+            not_calificaciones_push = boolean_to_int(body['not_calificaciones_push']),
+            not_entrevistas_push = boolean_to_int(body['not_entrevistas_push']),
+            not_extraescolares_push = boolean_to_int(body['not_extraescolares_push']),
+            not_enfermeria_push = boolean_to_int(body['not_enfermeria_push']),
+            not_comunicaciones_email = boolean_to_int(body['not_comunicaciones_email']),
+            not_calificaciones_email = boolean_to_int(body['not_calificaciones_email']),
+            not_entrevistas_email = boolean_to_int(body['not_entrevistas_email']),
+            not_extraescolares_email = boolean_to_int(body['not_extraescolares_email']),
+            not_enfermeria_email = boolean_to_int(body['not_enfermeria_email'])
+        )
+        print(ajustes)
+        '''
+        ajustes.autentificacion_dos_fases = boolean_to_int(body['autentificacion_dos_fases'])  
+        ajustes.proteccion_restablecimiento = boolean_to_int(body['proteccion_restablecimiento'])
+        ajustes.not_comunicaciones_push = boolean_to_int(body['not_comunicaciones_push'])
+        ajustes.not_calificaciones_push = boolean_to_int(body['not_calificaciones_push'])
+        ajustes.not_entrevistas_push = boolean_to_int(body['not_entrevistas_push'])
+        ajustes.not_extraescolares_push = boolean_to_int(body['not_extraescolares_push'])
+        ajustes.not_enfermeria_push = boolean_to_int(body['not_enfermeria_push'])
+        ajustes.not_comunicaciones_email = boolean_to_int(body['not_comunicaciones_email'])
+        ajustes.not_calificaciones_email = boolean_to_int(body['not_calificaciones_email'])
+        ajustes.not_entrevistas_email = boolean_to_int(body['not_entrevistas_email'])
+        ajustes.not_extraescolares_email = boolean_to_int(body['not_extraescolares_email'])
+        ajustes.not_enfermeria_email = boolean_to_int(body['not_enfermeria_email'])
         ajustes.save()
-
+        '''
         return JsonResponse({"mensaje": "Guardado"}, status=200)
 
 
