@@ -22,6 +22,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapplication.R;
+import com.example.myapplication.objetos.DestinatarioObject;
 import com.example.myapplication.rest.Rest;
 
 import org.json.JSONArray;
@@ -35,8 +36,8 @@ public class Destinatario extends AppCompatActivity {
     private Toolbar toolbar;
     private ListView listView;
     private ImageView checkButton;
-    private List<Boolean> checked = new ArrayList<>();
-    private ListAdapter adapter;
+    private Boolean[] checked;
+    private DestinatarioAdapter adapter;
     private ConfirmarListener listener;
     private Context context = this;
     @Override
@@ -55,8 +56,7 @@ public class Destinatario extends AppCompatActivity {
         checkButton = findViewById(R.id.tickToolbar);
         checkButton.setOnClickListener(confirmarListener);
 
-        if (checked.size() < 1)
-            llenarLista();
+        llenarLista();
     }
 
     private void llenarLista() {
@@ -66,18 +66,38 @@ public class Destinatario extends AppCompatActivity {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        String array[];
-                        array = new String[response.length()];
-
+                        DestinatarioObject array[];
+                        array = new DestinatarioObject[response.length()];
+                        checked = new Boolean[response.length()];
                         for (int i=0; i<response.length(); i++) {
                             try {
-                                array[i] = response.getString(i);
-                                checked.add(false);
+                                DestinatarioObject destinatario = new DestinatarioObject(response.getJSONObject(i).getInt("id"), response.getJSONObject(i).getInt("tipoUsuario"), response.getJSONObject(i).getString("nombre"));
+                                array[i] = destinatario;
+
                             } catch (JSONException e) {
                                 throw new RuntimeException(e);
                             }
                         }
-                        adapter = new DestinatarioAdapter(context, array);
+
+                        SharedPreferences sharedPreferences = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
+                        if (sharedPreferences.getString("destinatarios", null) != null) {
+                            try {
+                                JSONObject object = new JSONObject(sharedPreferences.getString("destinatarios", null));
+                                JSONArray jsonArray = object.getJSONArray("destinatarios");
+
+                                for (int i=0; i<checked.length; i++) {
+                                    checked[i] = jsonArray.getJSONObject(i).getBoolean("checked");
+                                }
+                            } catch (JSONException e) {
+                                throw new RuntimeException(e);
+                            }
+
+
+                        } else {
+                            for (int i=0; i<checked.length; i++)
+                                checked[i] = false;
+                        }
+                        adapter = new DestinatarioAdapter(context, array, checked);
                         listener = (ConfirmarListener) adapter;
                         listView.setAdapter(adapter);
                     }
@@ -95,14 +115,16 @@ public class Destinatario extends AppCompatActivity {
     View.OnClickListener confirmarListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            Boolean[] checkedArray = new Boolean[listener.checkedLenght()];
+            Boolean[] checkedArray;
             checkedArray = listener.confirmarListener();
             JSONArray array  = new JSONArray();
 
             for (int i=0; i<checkedArray.length; i++) {
                 JSONObject object = new JSONObject();
                 try {
-                    object.put("nombre", adapter.getItem(i));
+                    object.put("nombre", adapter.getItem(i).getNombre());
+                    object.put("id", adapter.getItem(i).getId());
+                    object.put("tipoUsuario", adapter.getItem(i).getTipoUsuario());
                     object.put("checked", checkedArray[i]);
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -118,17 +140,18 @@ public class Destinatario extends AppCompatActivity {
             }
 
             SharedPreferences sharedPreferences = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
-            sharedPreferences.edit().putString("destinatarios", destinatarios.toString());
+            sharedPreferences.edit().putString("destinatarios", destinatarios.toString()).commit();
             onBackPressed();
             finish();
         }
     };
-
+    
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
+
 
 
 }

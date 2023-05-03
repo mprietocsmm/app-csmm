@@ -13,24 +13,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.example.myapplication.R;
+import com.example.myapplication.objetos.DestinatarioObject;
 
 import java.util.List;
 
 public class DestinatarioAdapter extends BaseAdapter implements ConfirmarListener {
-    private String[] lista;
+    private DestinatarioObject[] lista;
     private Context context;
     private CheckBox[] checkBoxArray;
     private static Boolean[] checked;
     private LinearLayout[] viewArray;
     private LayoutInflater inflater;
 
-    public DestinatarioAdapter(Context context, String[] lista) {
+    public DestinatarioAdapter(Context context, DestinatarioObject[] lista, Boolean[] checked) {
         this.context = context;
         this.lista = lista;
-        checked = new Boolean[lista.length];
+        this.checked = new Boolean[lista.length];
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        for (int i=0; i<checked.length; i++)
-            checked[i] = false;
+        this.checked = checked;
+
 
         checkBoxArray = new CheckBox[checked.length];
         viewArray = new LinearLayout[checked.length];
@@ -42,7 +43,7 @@ public class DestinatarioAdapter extends BaseAdapter implements ConfirmarListene
     }
 
     @Override
-    public Object getItem(int position) {
+    public DestinatarioObject getItem(int position) {
         return lista[position];
     }
 
@@ -63,7 +64,7 @@ public class DestinatarioAdapter extends BaseAdapter implements ConfirmarListene
         }
 
         TextView nombre = view.findViewById(R.id.nombreTextView);
-        nombre.setText(getItem(position).toString());
+        nombre.setText(lista[position].getNombre());
 
         CheckBox cBox = view.findViewById(R.id.checkbox);
         cBox.setTag(Integer.valueOf(position)); // set the tag so we can identify the correct row in the listener

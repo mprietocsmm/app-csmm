@@ -75,57 +75,65 @@ public class CrearComunicacion extends AppCompatActivity {
                 Rest rest = Rest.getInstance(context);
                 SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss", Locale.getDefault());
+                SharedPreferences sharedPreferencesDestinatarios = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
+                JSONArray destinatariosArray = new JSONArray();
+                JSONObject object = new JSONObject();
+                boolean isNull = false;
 
-                JSONObject body = new JSONObject();
                 try {
-                    body.put("tiporemite", sharedPreferences.getString("tipoUsuario", null));
-                    body.put("token", sharedPreferences.getString("token", null));
-                    body.put("fecha", sdf.format(new Date()));
-                    //body.put("destinatario", destinatarioTextInput.getText().toString());
-                    body.put("asunto", asuntoTextInput.getText().toString());
-                    body.put("mensaje", mensajeTextInput.getText().toString());
+                    object = new JSONObject(sharedPreferencesDestinatarios.getString("destinatarios", null));
+                    destinatariosArray = object.getJSONArray("destinatarios");
+
+                    for (int i=0; i<destinatariosArray.length(); i++) {
+                        if (!destinatariosArray.getJSONObject(i).getBoolean("checked"))
+                            destinatariosArray.remove(i);
+                    }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
+                } catch (NullPointerException nullPointerException) {
+                    isNull = true;
                 }
 
-                rest.comunicaciones(
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Toast.makeText(context, "¡Comunicación enviada con éxito!", Toast.LENGTH_SHORT).show();
-                                onBackPressed();
-                                finish();
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Toast.makeText(context, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                            }
-                        },
-                        body
-                );
+                if (!isNull) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd HH:mm:ss", Locale.getDefault());
+
+                    JSONObject body = new JSONObject();
+                    try {
+                        body.put("tipoRemite", sharedPreferences.getString("tipoUsuario", null));
+                        body.put("token", sharedPreferences.getString("token", null));
+                        body.put("fecha", sdf.format(new Date()));
+                        body.put("destinatarios", destinatariosArray);
+                        body.put("asunto", asuntoTextInput.getText().toString());
+                        body.put("mensaje", mensajeTextInput.getText().toString());
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    rest.comunicaciones(
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Toast.makeText(context, "¡Comunicación enviada con éxito!", Toast.LENGTH_SHORT).show();
+                                    onBackPressed();
+                                    finish();
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(context, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            },
+                            body
+                    );
+                    sharedPreferencesDestinatarios.edit().clear();
+                } else {
+                    Toast.makeText(context, "Ningún destinatario seleccionado", Toast.LENGTH_LONG).show();
+                }
+
             }
         }
     };
-
-    private JSONArray getDestinatarios() {
-        SharedPreferences sharedPreferences = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
-        JSONArray array = new JSONArray();
-        if (sharedPreferences.getString("destinatarios", null) != null) {
-            try {
-                destinatarios = new JSONObject(sharedPreferences.getString("destinatarios", null)).getJSONArray("destinatarios");
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
-
-
-
-        }
-
-        return array;
-    }
 
     View.OnClickListener destinatarioListener = new View.OnClickListener() {
         @Override
@@ -141,5 +149,12 @@ public class CrearComunicacion extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    public void onBackPressed() {
+        SharedPreferences sharedPreferences = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
+        sharedPreferences.edit().clear().apply();
+        super.onBackPressed();
+        finish();
+    }
 
 }
