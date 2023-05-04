@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +37,7 @@ public class Comunicaciones extends Fragment {
     private SwipeRefreshLayout swipeRefresh;
     private boolean clicked = false;
     private ShimmerFrameLayout shimmerFrameLayout;
+    private TextView inicioTextView;
 
     public static Comunicaciones newInstance() {
         Comunicaciones fragment = new Comunicaciones();
@@ -76,6 +78,7 @@ public class Comunicaciones extends Fragment {
         crearAsistencia = view.findViewById(R.id.botonNuevaAsistencia);
         crearAsistencia.setOnClickListener(crearAsistenciaListener);
 
+        inicioTextView = view.findViewById(R.id.textViewInicio);
     }
 
     private void llenarRecyclerView() throws JSONException {
@@ -84,42 +87,52 @@ public class Comunicaciones extends Fragment {
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
-                        try {
-                            List<ComunicacionesObjeto> lista = new ArrayList<>();
 
-                            for (int i=0; i<response.length(); i++) {
+                        if (response.length() != 0) {
+                            recyclerView.setVisibility(View.VISIBLE);
+                            inicioTextView.setVisibility(View.INVISIBLE);
+                            try {
+                                List<ComunicacionesObjeto> lista = new ArrayList<>();
 
-                                ComunicacionesObjeto comunicaciones = new ComunicacionesObjeto(
-                                        response.getJSONObject(i).getString("asunto"),
-                                        response.getJSONObject(i).getString("mensaje"),
-                                        response.getJSONObject(i).getString("remitente"));
+                                for (int i=0; i<response.length(); i++) {
 
-                                lista.add(comunicaciones);
+                                    ComunicacionesObjeto comunicaciones = new ComunicacionesObjeto(
+                                            response.getJSONObject(i).getString("asunto"),
+                                            response.getJSONObject(i).getString("mensaje"),
+                                            response.getJSONObject(i).getString("remitente"));
 
+                                    lista.add(comunicaciones);
+
+                                }
+
+                                ComunicacionesAdapter adapter = new ComunicacionesAdapter(lista, new ComunicacionesAdapter.RecyclerItemClick() {
+                                    @Override
+                                    public void itemClick(ComunicacionesObjeto item) {
+                                        Intent intent = new Intent(getContext(), ComunicacionesCompletas.class);
+                                        intent.putExtra("comunicacion", item);
+                                        startActivity(intent);
+                                    }
+                                });
+
+                                recyclerView.setVisibility(View.VISIBLE);
+
+                                // Parar la preview de carga de datos y hacerla desaparecer
+                                shimmerFrameLayout.stopShimmer();
+                                shimmerFrameLayout.setVisibility(View.GONE);
+
+                                recyclerView.setAdapter(adapter);
+                            } catch (JSONException e) {
+                                swipeRefresh.setRefreshing(false);
+                                throw new RuntimeException(e);
                             }
 
-                            ComunicacionesAdapter adapter = new ComunicacionesAdapter(lista, new ComunicacionesAdapter.RecyclerItemClick() {
-                                @Override
-                                public void itemClick(ComunicacionesObjeto item) {
-                                    Intent intent = new Intent(getContext(), ComunicacionesCompletas.class);
-                                    intent.putExtra("comunicacion", item);
-                                    startActivity(intent);
-                                }
-                            });
-
-                            recyclerView.setVisibility(View.VISIBLE);
-
-                            // Parar la preview de carga de datos y hacerla desaparecer
-                            shimmerFrameLayout.stopShimmer();
-                            shimmerFrameLayout.setVisibility(View.GONE);
-
-                            recyclerView.setAdapter(adapter);
-                            swipeRefresh.setRefreshing(false);
-                        } catch (JSONException e) {
-                            swipeRefresh.setRefreshing(false);
-                            throw new RuntimeException(e);
+                        } else {
+                            recyclerView.setVisibility(View.INVISIBLE);
+                            inicioTextView.setVisibility(View.VISIBLE);
+                            shimmerFrameLayout.setVisibility(View.INVISIBLE);
                         }
 
+                        swipeRefresh.setRefreshing(false);
                     }
                 },
                 new Response.ErrorListener() {
@@ -197,6 +210,7 @@ public class Comunicaciones extends Fragment {
             try {
                 // Hacemos desaparecer el recyclerView
                 recyclerView.setVisibility(View.GONE);
+                inicioTextView.setVisibility(View.GONE);
                 // Hacemos aparecer la preview de carga
                 shimmerFrameLayout.setVisibility(View.VISIBLE);
                 shimmerFrameLayout.startShimmer();
