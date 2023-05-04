@@ -8,10 +8,9 @@ import json
 
 
 @csrf_exempt
-def comunicaciones(request):
+def comunicaciones(request, modo):
     if request.method == 'POST':
         body = json.loads(request.body)
-        print(body)
         
         try:
             tipo_remite = body['tipoRemite']
@@ -31,7 +30,6 @@ def comunicaciones(request):
         for destinatario in destinatarios:
             tipo_destinatario = destinatario['tipoUsuario']
             destinatario = busqueda_usuario_id_tipo(destinatario['id'], destinatario['tipoUsuario'])
-            print(destinatario)
             if int(tipo_remite) == 3:
                 for hijo in hijos(remitente[0].usuario):
                     comunicaciones_destino = ComunicacionesDestinos(idcomunicacion=comunicacion,
@@ -44,7 +42,6 @@ def comunicaciones(request):
 
         return JsonResponse({"mensaje": "comunicacion creada"}, status=200)
     elif request.method == 'GET':
-
         try:
             token = request.headers['token']
             tipo = request.headers['tipoUsuario']
@@ -52,22 +49,52 @@ def comunicaciones(request):
             return JsonResponse({"error": "Faltan parámetros"}, status=400)
 
         usuario = busqueda_usuario_token_tipo(token, tipo)
-        comunicaciones = Comunicaciones.objects.filter(idcomunicacion__in=ComunicacionesDestinos.objects.filter(tipodestino=tipo, iddestino=usuario[0].id).values_list('idcomunicacion', flat=True)).order_by('-fecha')
 
-        response = []
-        for comunicacion in comunicaciones:
-            remitente = busqueda_usuario_id_tipo(comunicacion.idremite, comunicacion.tiporemite)
-            response.append(
-                {
-                    "asunto": comunicacion.asunto,
-                    "mensaje": comunicacion.texto,
-                    "remitente": remitente[0].nombre + " " + remitente[0].apellido1 + " " + remitente[0].apellido2
-                }
-            )
-        return JsonResponse(response, safe=False, status=200)
+        if modo == 'recibidas':
+            comunicaciones = Comunicaciones.objects.filter(idcomunicacion__in=ComunicacionesDestinos.objects.filter(tipodestino=tipo, iddestino=usuario.id).values_list('idcomunicacion', flat=True)).order_by('-fecha')
+
+            response = []
+            for comunicacion in comunicaciones:
+                remitente = busqueda_usuario_id_tipo(comunicacion.idremite, comunicacion.tiporemite)
+                response.append(
+                    {
+                        "asunto": comunicacion.asunto,
+                        "mensaje": comunicacion.texto,
+                        "remitente": remitente.nombre + " " + remitente.apellido1 + " " + remitente.apellido2
+                    }
+                )
+            return JsonResponse(response, safe=False, status=200)
+        
+        elif modo == 'enviadas':
+            comunicaciones = Comunicaciones.objects.filter(tiporemite=tipo, idremite=usuario.id)
+            
+            response = []
+            for comunicacion in comunicaciones:
+                # Para que funcione distinct() para que no aparezcan repeditos los nombre debido a que por cada alumno asociado se crea una fila, solo hace falta recuperar una
+                # Con el values y el distinct funciona
+                destinatarios = ComunicacionesDestinos.objects.filter(idcomunicacion__idcomunicacion=comunicacion.idcomunicacion).values('idcomunicacion', 'iddestino', 'tipodestino').distinct()
+                destinatarios_list = []
+
+                for destinatario in destinatarios:
+                    destinatario = busqueda_usuario_id_tipo(destinatario['iddestino'], destinatario['tipodestino'])
+                    destinatarios_list.append(
+                        {
+                            "nombre": destinatario.nombre
+                        }
+                    ) 
+
+                response.append(
+                    {
+                        "asunto": comunicacion.asunto,
+                        "mensaje": comunicacion.texto,
+                        "destinatarios": destinatarios_list 
+                    }
+                )
+
+            return JsonResponse(response, safe=False, status=200)
+    
     else:
         return JsonResponse({"error": "Método HTTP no soportado"}, status=405)
-
 
 def get_contactos(request):
 

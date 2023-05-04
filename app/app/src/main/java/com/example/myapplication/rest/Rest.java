@@ -94,7 +94,7 @@ public class Rest {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonObjectRequest(
                 Request.Method.POST,
-                BASE_URL + "/comunicaciones",
+                BASE_URL + "/comunicaciones/enviar",
                 body,
                 onResponse,
                 onErrorResponse
@@ -105,7 +105,7 @@ public class Rest {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonArrayRequest(
                 Request.Method.GET,
-                BASE_URL + "/comunicaciones",
+                BASE_URL + "/comunicaciones/recibidas",
                 null,
                 onResponse,
                 onErrorResponse
