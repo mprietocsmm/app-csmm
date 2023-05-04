@@ -15,13 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from csmm_app.endpoints import endpoints, comunicaciones, launcher, perfil
+from csmm_app.endpoints import endpoints, comunicaciones, launcher, perfil, login, inicio
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('health', endpoints.health),
-    path('login', endpoints.login),
-    path('inicio', endpoints.inicio),
+    path('login', login.login),
+    path('inicio', inicio.inicio),
     path('comunicaciones', comunicaciones.comunicaciones),
     path('autenticar', launcher.authenticate),
     path('perfil', perfil.perfil),
