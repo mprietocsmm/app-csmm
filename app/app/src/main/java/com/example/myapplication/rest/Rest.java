@@ -25,7 +25,7 @@ public class Rest {
     private static Rest INSTANCE;
 
     private String ANDROID_LOCALHOST = "http://10.0.2.2:8000";
-    private String PC_LOCALHOST = "http://192.168.245.231:8000";
+    private String PC_LOCALHOST = "http://192.168.51.231:8000";
     private String BASE_URL = ANDROID_LOCALHOST;
     private Context context;
     private RequestQueue queue;
@@ -94,7 +94,7 @@ public class Rest {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonObjectRequest(
                 Request.Method.POST,
-                BASE_URL + "/comunicaciones",
+                BASE_URL + "/comunicaciones/enviar",
                 body,
                 onResponse,
                 onErrorResponse
@@ -105,7 +105,7 @@ public class Rest {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonArrayRequest(
                 Request.Method.GET,
-                BASE_URL + "/comunicaciones",
+                BASE_URL + "/comunicaciones/recibidas",
                 null,
                 onResponse,
                 onErrorResponse
@@ -122,6 +122,18 @@ public class Rest {
                 return myHeaders;
             }
         });
+    }
+
+    public void getContactos(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse, Context context) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonArrayWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/contactos",
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
     }
 
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
@@ -149,5 +161,32 @@ public class Rest {
             return myHeaders;
         }
     }
+
+    class JsonArrayWithCustomAuth extends JsonArrayRequest {
+        private Context context;
+
+        public JsonArrayWithCustomAuth(int method,
+                                                   String url,
+                                                   @Nullable JSONArray jsonRequest,
+                                                   Response.Listener<JSONArray> listener,
+                                                   @Nullable Response.ErrorListener errorListener,
+                                                    Context context) {
+            super(method, url, jsonRequest, listener, errorListener);
+            this.context = context;
+        }
+
+        @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+            SharedPreferences preferences = context.getSharedPreferences("usuario", Context.MODE_PRIVATE);
+            String sessionToken = preferences.getString("token", null);
+            String tipoUsuario = preferences.getString("tipoUsuario", null);
+
+            HashMap<String, String> myHeaders = new HashMap<>();
+            myHeaders.put("token", sessionToken);
+            myHeaders.put("tipoUsuario", tipoUsuario);
+            return myHeaders;
+        }
+    }
+
 
 }

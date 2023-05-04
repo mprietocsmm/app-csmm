@@ -22,6 +22,7 @@ urlpatterns = [
     path('health', endpoints.health),
     path('login', endpoints.login),
     path('inicio', endpoints.inicio),
-    path('comunicaciones', comunicaciones.comunicaciones),
+    path('comunicaciones/<str:modo>', comunicaciones.comunicaciones),
     path('autenticar', launcher.authenticate),
+    path('contactos', comunicaciones.get_contactos),
 ]

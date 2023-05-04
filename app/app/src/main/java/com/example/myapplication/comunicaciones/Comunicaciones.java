@@ -138,7 +138,7 @@ public class Comunicaciones extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(), "Fallo de conexión", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Fallo de conexión: " + error.toString(), Toast.LENGTH_LONG).show();
                         swipeRefresh.setRefreshing(false);
                         recyclerView.setVisibility(View.GONE);
                         shimmerFrameLayout.setVisibility(View.VISIBLE);

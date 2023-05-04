@@ -24,11 +24,12 @@ public class Launcher extends Activity {
     private Context context = this;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-       //getApplication().setTheme(R.style.Theme_MyApplication);
-       super.onCreate(savedInstanceState);
+        //getApplication().setTheme(R.style.Theme_MyApplication);
+        super.onCreate(savedInstanceState);
 
-       SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
-
+        SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences1 = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
+        sharedPreferences1.edit().clear().apply();
         if (sharedPreferences.getString("token", null) == null) {
             Intent intent = new Intent(getApplication(), Login.class);
             startActivity(intent);
