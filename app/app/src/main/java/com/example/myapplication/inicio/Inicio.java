@@ -1,6 +1,5 @@
 package com.example.myapplication.inicio;
 
-import android.app.ActionBar;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +27,10 @@ import com.example.myapplication.R;
 import com.example.myapplication.comunicaciones.Comunicaciones;
 import com.example.myapplication.login.Login;
 import com.example.myapplication.rest.Rest;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +39,7 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private TextView nombre;
-    private Rest rest = Rest.getInstance(this);
+    private final Rest rest = Rest.getInstance(this);
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -87,23 +88,42 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
         body.put("tipoUsuario", sharedPreferences.getString("tipoUsuario", null));
 
         rest.inicio(
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
+                response ->  {
                         try {
                             nombre.setText(response.getString("nombre"));
                         } catch (JSONException e) {}
-
-                    }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                error -> {
 
-                    }
                 },
                 body
         );
+
+        SharedPreferences sharedPreferencesTokenFCM = getSharedPreferences("tokenFCM", Context.MODE_PRIVATE);
+        //Toast.makeText(this, String.valueOf(sharedPreferencesTokenFCM.getBoolean("isTokenSaved", false)), Toast.LENGTH_SHORT).show();
+        if (!sharedPreferencesTokenFCM.getBoolean("isTokenSaved", false)) {
+            FirebaseMessaging.getInstance().getToken()
+                    .addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            Toast.makeText(this, "failed", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        sharedPreferencesTokenFCM.edit().putString("token", task.getResult()).apply();
+                        JSONObject body1 = new JSONObject();
+                        try {
+                            body1.put("tokenSesion", sharedPreferences.getString("token", null));
+                            body1.put("tokenFCM", task.getResult());
+                            body1.put("tipoUsuario", sharedPreferences.getString("tipoUsuario", null));
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                        rest.guardarTokenFCM(
+                                response -> sharedPreferencesTokenFCM.edit().putBoolean("isTokenSaved", true).apply(),
+                                error -> {},
+                                body1
+                        );
+                    });
+        }
     }
 
     @Override
@@ -145,9 +165,31 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
 
                 if (sharedPreferences.edit().remove("token").commit() == true && sharedPreferences.edit().remove("tipoUsuario").commit()) {
                     Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                    finish();
+
+                    SharedPreferences sharedPreferencesTokenFCM = getSharedPreferences("tokenFCM", Context.MODE_PRIVATE);
+                    JSONObject body = new JSONObject();
+                    try {
+                        body.put("tokenFCM", sharedPreferencesTokenFCM.getString("tokenFCM", null));
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+
+                    rest.borrarTokenFCM(
+                            response -> {
+                                sharedPreferencesTokenFCM.edit().remove("isTokenSaved").commit();
+                                Intent intent = new Intent(this, Login.class);
+                                startActivity(intent);
+                                finish();
+                            },
+                            error -> {
+
+                            },
+                            body
+                    );
+
+
+
+
                 } else {
                     Toast.makeText(this, "Error cerrando sesión", Toast.LENGTH_SHORT).show();
                 }

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "779845870319",
+    "project_id": "notificaciones-push-csmm",
+    "storage_bucket": "notificaciones-push-csmm.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:779845870319:android:a52b2c384d15764597711a",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "779845870319-v1o53p5d3i3bdcs8s3jv50p1tcksjoqo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFir0Fbg5rI2EZCe4UqUJng__qCYT4nZk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "779845870319-v1o53p5d3i3bdcs8s3jv50p1tcksjoqo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

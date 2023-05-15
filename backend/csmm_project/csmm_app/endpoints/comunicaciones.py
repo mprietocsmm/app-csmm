@@ -2,10 +2,81 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
-from csmm_app.models import Comunicaciones, ComunicacionesDestinos
+from csmm_app.models import Comunicaciones, ComunicacionesDestinos, TokenFcm
 from csmm_app.endpoints.funciones import *
+import config
 import json
+import datetime
+import firebase_admin
+from firebase_admin import credentials, messaging
 
+firebase_cred = credentials.Certificate(config.SERVICE_ACCOUNT_KEY)
+firebase_app = firebase_admin.initialize_app(firebase_cred)
+
+def send_token_push(title, body, token_destinatarios, data):
+    message = messaging.MulticastMessage(
+        android=messaging.AndroidConfig(
+            ttl=datetime.timedelta(seconds=3600),
+            priority='high',
+            data=data,
+            notification=messaging.AndroidNotification(
+                title=title,
+                body=body,
+                #click_action='login',
+            ),
+        ),
+        tokens=token_destinatarios,
+    
+    )
+
+    response = messaging.send_multicast(message)
+
+    if response.failure_count > 0:
+        responses = response.responses
+        failed_tokens = []
+        for idx, resp in enumerate(responses):
+            if not resp.success:
+                # The order of responses corresponds to the order of the registration tokens.
+                failed_tokens.append(token_destinatarios[idx])
+        print('List of tokens that caused failures: {0}'.format(failed_tokens))
+
+def send_all(request):
+    tokens = TokenFcm.objects.all()
+
+    tokens_list = []
+    for token in tokens:
+        tokens_list.append(token.token)
+
+    message = messaging.MulticastMessage(
+        android=messaging.AndroidConfig(
+            ttl=datetime.timedelta(seconds=3600),
+            priority='high',
+            notification=messaging.AndroidNotification(
+                title='Titulo de la notificacion',
+                body='Cuerpo de la notificacion',
+                #click_action='login',
+                priority='max',
+                channel_id='Comunicaciones'
+            ),
+            data={
+                "mensaje": "hoola"
+            },
+        ),
+        tokens=tokens_list,
+    )
+
+    response = messaging.send_multicast(message)
+    if response.failure_count > 0:
+        responses = response.responses
+        failed_tokens = []
+        for idx, resp in enumerate(responses):
+            if not resp.success:
+                failed_tokens.append(tokens_list[idx])
+        print('List of tokens that caused failures: {0}'.format(failed_tokens))
+
+        for token in failed_tokens:
+            TokenFcm.objects.get(token=token).delete()
+    return JsonResponse({"mensaje": "ok"}, safe=False, status=200)
 
 @csrf_exempt
 def comunicaciones(request, modo):
@@ -23,15 +94,18 @@ def comunicaciones(request, modo):
             return JsonResponse({"error": e}, status=400)
 
         remitente = busqueda_usuario_token_tipo(token_remitente, tipo_remite)
-        comunicacion = Comunicaciones(tiporemite=tipo_remite, idremite=remitente[0].id, fecha=fecha, asunto=asunto,
+        comunicacion = Comunicaciones(tiporemite=tipo_remite, idremite=remitente.id, fecha=fecha, asunto=asunto,
                                       texto=texto)
         comunicacion.save()
 
+        token_destinatarios = []
         for destinatario in destinatarios:
             tipo_destinatario = destinatario['tipoUsuario']
-            destinatario = busqueda_usuario_id_tipo(destinatario['id'], destinatario['tipoUsuario'])
+            destinatario = busqueda_usuario_id_tipo(destinatario['id'], tipo_destinatario)
+            token_destinatarios.append(TokenFcm.objects.filter(id_usuario=destinatario.id, tipo=tipo_destinatario).values_list('token', flat=True)[0])
+
             if int(tipo_remite) == 3:
-                for hijo in hijos(remitente[0].usuario):
+                for hijo in hijos(remitente.usuario):
                     comunicaciones_destino = ComunicacionesDestinos(idcomunicacion=comunicacion,
                                                                 tipodestino=tipo_destinatario,
                                                                 iddestino=destinatario.id, email=0,
@@ -39,7 +113,8 @@ def comunicaciones(request, modo):
                     comunicaciones_destino.save()
             if int(tipo_remite) == 4:
                 pass
-
+        
+        send_token_push(body['asunto'], body['mensaje'], token_destinatarios, {"id_comunicacion": str(comunicaciones_destino.idcomunicaciondestino)})
         return JsonResponse({"mensaje": "comunicacion creada"}, status=200)
     elif request.method == 'GET':
         try:
@@ -57,7 +132,8 @@ def comunicaciones(request, modo):
             for comunicacion in comunicaciones:
                 remitente = busqueda_usuario_id_tipo(comunicacion.idremite, comunicacion.tiporemite)
                 response.append(
-                    {
+                    {   
+                        "id": comunicacion.idcomunicacion,
                         "asunto": comunicacion.asunto,
                         "mensaje": comunicacion.texto,
                         "remitente": remitente.nombre + " " + remitente.apellido1 + " " + remitente.apellido2

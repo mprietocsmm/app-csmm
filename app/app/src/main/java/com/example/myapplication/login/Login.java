@@ -1,9 +1,12 @@
 package com.example.myapplication.login;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -12,7 +15,11 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -26,13 +33,34 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Login extends Activity {
+public class Login extends AppCompatActivity {
     private ImageView logo;
     private TextInputLayout usuarioLayout, contraseñaLayout;
     private TextInputEditText usuario, contraseña;
     private Button inicioSesion;
     private Rest rest = Rest.getInstance(this);
     private Context context = this;
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+                    // FCM SDK (and your app) can post notifications.
+                } else {
+                    // TODO: Inform user that that your app will not show notifications.
+                }
+            });
+
+    private void askNotificationPermission() {
+        // This is only necessary for API level >= 33 (TIRAMISU)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                    PackageManager.PERMISSION_GRANTED) {
+                // FCM SDK (and your app) can post notifications.
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +80,7 @@ public class Login extends Activity {
         contraseñaLayout = findViewById(R.id.contraseñaTextInputLayout);
         inicioSesion = findViewById(R.id.botonMaterialButton);
         inicioSesion.setOnClickListener(inicioSesionListener);
+        askNotificationPermission();
     }
 
     View.OnClickListener inicioSesionListener = new View.OnClickListener() {

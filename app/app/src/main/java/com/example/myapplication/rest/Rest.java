@@ -25,7 +25,7 @@ public class Rest {
     private static Rest INSTANCE;
 
     private String ANDROID_LOCALHOST = "http://10.0.2.2:8000";
-    private String PC_LOCALHOST = "http://192.168.51.231:8000";
+    private String PC_LOCALHOST = "http://192.168.146.231:8000";
     private String BASE_URL = ANDROID_LOCALHOST;
     private Context context;
     private RequestQueue queue;
@@ -136,6 +136,27 @@ public class Rest {
         ));
     }
 
+    public void guardarTokenFCM(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequest(
+                Request.Method.POST,
+                BASE_URL + "/token",
+                body,
+                onResponse,
+                onErrorResponse
+        )).setRetryPolicy(new CustomRetryPolicy());
+    }
+
+    public void borrarTokenFCM(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequest(
+                Request.Method.DELETE,
+                BASE_URL + "/token",
+                body,
+                onResponse,
+                onErrorResponse
+        )).setRetryPolicy(new CustomRetryPolicy());
+    }
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 

@@ -415,4 +415,13 @@ class ProfesorAsignaturas(models.Model):
         db_table = 'profesor_asignaturas'
 
 
+class TokenFcm(models.Model):
+    id = models.IntegerField(primary_key=True, auto_created=True)
+    token = models.CharField(max_length=200, unique=True)
+    id_usuario = models.IntegerField()
+    tipo = models.IntegerField()
+    fecha = models.DateField()
 
+    class Meta:
+        managed = False
+        db_table = 'token_fcm'
