@@ -149,12 +149,13 @@ public class Rest {
 
     public void borrarTokenFCM(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
         queue = Volley.newRequestQueue(context);
-        queue.add(new JsonObjectRequest(
+        queue.add(new JsonObjectRequestWithCustomAuthFCM(
                 Request.Method.DELETE,
                 BASE_URL + "/token",
-                body,
+                null,
                 onResponse,
-                onErrorResponse
+                onErrorResponse,
+                context
         )).setRetryPolicy(new CustomRetryPolicy());
     }
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
@@ -209,5 +210,27 @@ public class Rest {
         }
     }
 
+    class JsonObjectRequestWithCustomAuthFCM extends JsonObjectRequest {
+        private Context context;
 
+        public JsonObjectRequestWithCustomAuthFCM(int method,
+                                               String url,
+                                               @Nullable JSONObject jsonRequest,
+                                               Response.Listener<JSONObject> listener,
+                                               @Nullable Response.ErrorListener errorListener,
+                                               Context context) {
+            super(method, url, jsonRequest, listener, errorListener);
+            this.context = context;
+        }
+
+        @Override
+        public Map<String, String> getHeaders() {
+            SharedPreferences preferences = context.getSharedPreferences("tokenFCM", Context.MODE_PRIVATE);
+            String token = preferences.getString("token", null);
+
+            HashMap<String, String> myHeaders = new HashMap<>();
+            myHeaders.put("token", token);
+            return myHeaders;
+        }
+    }
 }

@@ -102,7 +102,7 @@ def comunicaciones(request, modo):
         for destinatario in destinatarios:
             tipo_destinatario = destinatario['tipoUsuario']
             destinatario = busqueda_usuario_id_tipo(destinatario['id'], tipo_destinatario)
-            token_destinatarios.append(TokenFcm.objects.filter(id_usuario=destinatario.id, tipo=tipo_destinatario).values_list('token', flat=True)[0])
+            token_destinatarios.append(TokenFcm.objects.get(id_usuario=destinatario.id, tipo=tipo_destinatario).values_list('token', flat=True))
 
             if int(tipo_remite) == 3:
                 for hijo in hijos(remitente.usuario):
@@ -114,7 +114,8 @@ def comunicaciones(request, modo):
             if int(tipo_remite) == 4:
                 pass
         
-        send_token_push(body['asunto'], body['mensaje'], token_destinatarios, {"id_comunicacion": str(comunicaciones_destino.idcomunicaciondestino)})
+        #send_token_push(body['asunto'], body['mensaje'], token_destinatarios, {"id_comunicacion": str(comunicaciones_destino.idcomunicaciondestino)})
+        send_token_push(body['asunto'], body['mensaje'], token_destinatarios, {"asunto": comunicacion.asunto,"mensaje": comunicacion.texto, "remitente": destinatario.nombre})
         return JsonResponse({"mensaje": "comunicacion creada"}, status=200)
     elif request.method == 'GET':
         try:

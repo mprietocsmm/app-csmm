@@ -5,6 +5,8 @@ from csmm_app.endpoints.funciones import *
 import json, datetime, config
 import firebase_admin
 from firebase_admin import credentials, messaging
+import requests
+import config
 
 @csrf_exempt
 def token(request):
@@ -22,13 +24,15 @@ def token(request):
         registro.save()
         return JsonResponse({}, status=200)
     elif request.method == 'DELETE':
-        body = json.loads(request.body)
+        
         try:
-            token_fcm = body['tokenFCM']
+            token_fcm = request.headers.get('token')
         except KeyError:
             return JsonResponse({}, status=400)
         
-        TokenFcm.objects.get(token=token_fcm).delete()
+        token_fcm = TokenFcm.objects.get(token=token_fcm)
+        token_fcm.delete()
+        return JsonResponse({}, status=200)
     else:
         return JsonResponse({}, status=405)
     
@@ -43,7 +47,6 @@ def comprobar(request):
             ttl=datetime.timedelta(seconds=3600),
             priority='normal',
             notification=messaging.AndroidNotification(
-                priority='min',
                 channel_id='Comunicaciones'
             ),
             data={
@@ -64,4 +67,7 @@ def comprobar(request):
 
         for token in failed_tokens:
             TokenFcm.objects.get(token=token).delete()
+
     return JsonResponse({"mensaje": "ok"}, safe=False, status=200)
+
+

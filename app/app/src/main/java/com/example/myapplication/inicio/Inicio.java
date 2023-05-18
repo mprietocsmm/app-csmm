@@ -164,19 +164,24 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
                 SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
 
                 if (sharedPreferences.edit().remove("token").commit() == true && sharedPreferences.edit().remove("tipoUsuario").commit()) {
-                    Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
 
                     SharedPreferences sharedPreferencesTokenFCM = getSharedPreferences("tokenFCM", Context.MODE_PRIVATE);
                     JSONObject body = new JSONObject();
                     try {
-                        body.put("tokenFCM", sharedPreferencesTokenFCM.getString("tokenFCM", null));
+                        body.put("tokenFCM", sharedPreferencesTokenFCM.getString("token", null));
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
-
+                    try {
+                        Toast.makeText(this, body.getString("tokenFCM"), Toast.LENGTH_SHORT).show();
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                     rest.borrarTokenFCM(
                             response -> {
-                                sharedPreferencesTokenFCM.edit().remove("isTokenSaved").commit();
+                                sharedPreferencesTokenFCM.edit().remove("isTokenSaved").apply();
+                                sharedPreferencesTokenFCM.edit().remove("token").apply();
                                 Intent intent = new Intent(this, Login.class);
                                 startActivity(intent);
                                 finish();

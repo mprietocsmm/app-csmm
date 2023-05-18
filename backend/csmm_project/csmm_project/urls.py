@@ -26,5 +26,5 @@ urlpatterns = [
     path('autenticar', launcher.authenticate),
     path('contactos', comunicaciones.get_contactos),
     path('token', token.token),
-    path('send', comunicaciones.send_all)
+    path('send', token.comprobar)
 ]

@@ -1,23 +1,24 @@
 package com.example.myapplication.utils;
 
 import android.Manifest;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresPermission;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
 import com.example.myapplication.R;
 import com.example.myapplication.comunicaciones.ComunicacionesCompletas;
+import com.example.myapplication.objetos.ComunicacionesObjeto;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private final String CHANNEL_ID = "default";
@@ -27,13 +28,19 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         super.onMessageReceived(message);
 
         Intent intent = new Intent(getApplicationContext(), ComunicacionesCompletas.class);
-        //intent.setFlags()
+        ComunicacionesObjeto objeto = new ComunicacionesObjeto(message.getData().get("asunto"), message.getData().get("mensaje"), message.getData().get("remitente"));
+
+
+        intent.putExtra("comunicacion", objeto);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 579, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications)
                 .setContentTitle(message.getNotification().getTitle())
                 .setContentText(message.getNotification().getBody())
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setCategory(NotificationCompat.CATEGORY_MESSAGE);
+                .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+                .setContentIntent(pendingIntent);
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(this);
 
@@ -41,6 +48,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             return;
         }
         notificationManagerCompat.notify(234, builder.build());
+
     }
 
 
