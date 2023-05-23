@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapplication.R;
 import com.example.myapplication.comunicaciones.Comunicaciones;
+import com.example.myapplication.horario.Horario;
 import com.example.myapplication.login.Login;
 import com.example.myapplication.rest.Rest;
 import com.google.android.material.navigation.NavigationView;
@@ -53,8 +54,6 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
         drawer.addDrawerListener(toggle);
-
-
 
         getWindow().setNavigationBarColor(getResources().getColor(R.color.blue));
         getWindow().setNavigationBarColor(getResources().getColor(R.color.white));
@@ -134,9 +133,13 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
             case R.id.nav_item_inicio:
                 Toast.makeText(this, "Clicaste Inicio", Toast.LENGTH_LONG).show();
                 break;
+            case R.id.nav_item_horario:
+                fragment = Horario.newInstance();
+                break;
             case R.id.nav_item_asignaturas:
                 Toast.makeText(this, "Clicaste Asignaturas", Toast.LENGTH_SHORT).show();
                 break;
+
             case R.id.nav_item_comunicaciones:
                 fragment = Comunicaciones.newInstance();
                 break;

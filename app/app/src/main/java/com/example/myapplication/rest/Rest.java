@@ -136,6 +136,17 @@ public class Rest {
         ));
     }
 
+    public void horario(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonArrayWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/horario",
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        )).setRetryPolicy(new CustomRetryPolicy());
+    }
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 
