@@ -44,6 +44,11 @@ def horario(request):
                 }
             )
         return JsonResponse(lista, status=200, safe=False)
+    
+    if int(tipo_usuario) == 2:
+        with connection.cursor() as cursor:
+            cursor.execute('select `csmm_gestor`.`horario`.`id_horario` AS `id_horario`,`csmm_gestor`.`marco_horario`.`diasemana` AS `diasemana`,`csmm_gestor`.`marco_horario`.`modulo` AS `modulo`,`csmm_gestor`.`marco_horario`.`inicio` AS `inicio`,`csmm_gestor`.`marco_horario`.`fin` AS `fin`,`csmm_gestor`.`profesores`.`id` AS `id_profesor`,`csmm_gestor`.`profesores`.`usuario` AS `usuario`,`csmm_gestor`.`profesores`.`nombre` AS `nombre`,`csmm_gestor`.`profesores`.`apellido1` AS `apellido1`,`csmm_gestor`.`profesores`.`apellido2` AS `apellido2`,`asignaturas_materias_grupos`.`id` AS `id_asignatura`,`asignaturas_materias_grupos`.`materia` AS `materia`,`asignaturas_materias_grupos`.`grupo` AS `grupo`,`asignaturas_materias_grupos`.`cod_asignatura` AS `cod_asignatura`,`csmm_gestor`.`cursos_escolares`.`curso_escolar` AS `curso_escolar` from ((((`csmm_gestor`.`horario` join `csmm_gestor`.`cursos_escolares` on(`csmm_gestor`.`horario`.`cursoescolar` = `csmm_gestor`.`cursos_escolares`.`id`)) join `csmm_gestor`.`asignaturas_materias_grupos` on(`csmm_gestor`.`horario`.`id_asignatura` = `asignaturas_materias_grupos`.`id`)) join `csmm_gestor`.`profesores` on(`csmm_gestor`.`horario`.`id_profesor` = `csmm_gestor`.`profesores`.`id`)) join `csmm_gestor`.`marco_horario` on(`csmm_gestor`.`horario`.`id_horario` = `csmm_gestor`.`marco_horario`.`id_horario`)) WHERE `id_profesor`=' + str(usuario.id))
+            query = fetchallasdict(cursor)
         '''
         horario = Horario.objects.filter(id_profesor=usuario.id).order_by('diasemana', 'modulo')
 
