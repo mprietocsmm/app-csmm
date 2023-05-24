@@ -4,7 +4,7 @@ from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 from csmm_app.models import Comunicaciones, ComunicacionesDestinos
 from csmm_app.endpoints.funciones import *
-import json
+import json, datetime
 
 
 @csrf_exempt
@@ -60,7 +60,8 @@ def comunicaciones(request, modo):
                     {
                         "asunto": comunicacion.asunto,
                         "mensaje": comunicacion.texto,
-                        "remitente": remitente.nombre + " " + remitente.apellido1 + " " + remitente.apellido2
+                        "remitente": remitente.nombre + " " + remitente.apellido1 + " " + remitente.apellido2,
+                        "fecha": comunicacion.fecha.strftime("%d/%m/%Y %H:%M")
                     }
                 )
             return JsonResponse(response, safe=False, status=200)

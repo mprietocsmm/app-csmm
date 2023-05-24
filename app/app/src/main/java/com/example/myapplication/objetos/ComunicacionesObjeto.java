@@ -3,12 +3,13 @@ package com.example.myapplication.objetos;
 import java.io.Serializable;
 
 public class ComunicacionesObjeto implements Serializable {
-    private String asunto, mensaje, remitente;
+    private String asunto, mensaje, remitente, fecha;
 
-    public ComunicacionesObjeto(String asunto, String mensaje, String remitente) {
+    public ComunicacionesObjeto(String asunto, String mensaje, String remitente, String fecha) {
         this.asunto = asunto;
         this.mensaje = mensaje;
         this.remitente = remitente;
+        this.fecha = fecha;
     }
 
     public String getAsunto() {
@@ -21,5 +22,9 @@ public class ComunicacionesObjeto implements Serializable {
 
     public String getRemitente() {
         return remitente;
+    }
+
+    public String getFecha() {
+        return fecha;
     }
 }
