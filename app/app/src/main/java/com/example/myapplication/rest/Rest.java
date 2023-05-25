@@ -136,6 +136,18 @@ public class Rest {
         ));
     }
 
+    public void getLlavero(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse, Context context) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonArrayWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/llavero",
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 
