@@ -27,6 +27,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapplication.R;
 import com.example.myapplication.comunicaciones.Comunicaciones;
+import com.example.myapplication.llavero.Llavero;
 import com.example.myapplication.login.Login;
 import com.example.myapplication.rest.Rest;
 import com.google.android.material.navigation.NavigationView;
@@ -139,6 +140,9 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
                 break;
             case R.id.nav_item_comunicaciones:
                 fragment = Comunicaciones.newInstance();
+                break;
+            case R.id.nav_item_llavero:
+                fragment = Llavero.newInstance();
                 break;
             case R.id.nav_item_cerrar_sesion:
                 SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
