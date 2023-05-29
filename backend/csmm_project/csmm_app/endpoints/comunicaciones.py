@@ -22,14 +22,14 @@ def comunicaciones(request):
             return JsonResponse({"error": "Faltan parámetros"}, status=400)
 
         remitente = busqueda_usuario_token_tipo(token_remitente, tipo_remite)
-        comunicacion = Comunicaciones(tiporemite=tipo_remite, idremite=remitente[0].id, fecha=fecha, asunto=asunto,
+        comunicacion = Comunicaciones(tiporemite=tipo_remite, idremite=remitente.id, fecha=fecha, asunto=asunto,
                                       texto=texto)
         comunicacion.save()
         tipo_destinatario = tipo_usuario(destinatario)
         destinatario = busqueda_usuario(destinatario, tipo_destinatario)
 
         if int(tipo_remite) == 3:
-            for hijo in hijos(remitente[0].usuario):
+            for hijo in hijos(remitente.usuario):
                 comunicaciones_destino = ComunicacionesDestinos(idcomunicacion=comunicacion,
                                                                 tipodestino=tipo_destinatario,
                                                                 iddestino=destinatario[0].id, email=0,
@@ -46,7 +46,7 @@ def comunicaciones(request):
             return JsonResponse({"error": "Faltan parámetros"}, status=400)
 
         usuario = busqueda_usuario_token_tipo(token, tipo)
-        comunicaciones = Comunicaciones.objects.filter(idcomunicacion__in=ComunicacionesDestinos.objects.filter(tipodestino=tipo, iddestino=usuario[0].id).values_list('idcomunicacion', flat=True)).order_by('-fecha')
+        comunicaciones = Comunicaciones.objects.filter(idcomunicacion__in=ComunicacionesDestinos.objects.filter(tipodestino=tipo, iddestino=usuario.id).values_list('idcomunicacion', flat=True)).order_by('-fecha')
 
         response = []
         for comunicacion in comunicaciones:
@@ -55,7 +55,7 @@ def comunicaciones(request):
                 {
                     "asunto": comunicacion.asunto,
                     "mensaje": comunicacion.texto,
-                    "remitente": remitente[0].nombre + " " + remitente[0].apellido1 + " " + remitente[0].apellido2
+                    "remitente": remitente.nombre + " " + remitente.apellido1 + " " + remitente.apellido2
                 }
             )
         return JsonResponse(response, safe=False, status=200)

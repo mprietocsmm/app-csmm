@@ -38,13 +38,13 @@ def busqueda_usuario_token(token):
 def busqueda_usuario_token_tipo(token, tipo):
     tipo = int(tipo)
     if tipo == 1:
-        return Administradores.objects.filter(token=token)
+        return Administradores.objects.get(token=token)
     elif tipo == 2:
-        return Alumnos.objects.filter(token=token)
+        return Alumnos.objects.get(token=token)
     elif tipo == 3:
-        return Familias.objects.filter(token=token)
+        return Familias.objects.get(token=token)
     elif tipo == 4:
-        return Profesores.objects.filter(token=token)
+        return Profesores.objects.get(token=token)
     
 def hijos(nombre):
     padre = Familias.objects.filter(usuario=nombre)
@@ -61,13 +61,13 @@ def busqueda_usuario_id_tipo(id, tipo):
     tipo = int(tipo)
     id = int(id)
     if tipo == 1:
-        return Administradores.objects.filter(id=id)
+        return Administradores.objects.get(id=id)
     elif tipo == 2:
-        return Alumnos.objects.filter(id=id)
+        return Alumnos.objects.get(id=id)
     elif tipo == 3:
-        return Familias.objects.filter(id=id)
+        return Familias.objects.get(id=id)
     elif tipo == 4:
-        return Profesores.objects.filter(id=id)
+        return Profesores.objects.get(id=id)
     
 def boolean_to_int(boolean):
     if boolean is True:

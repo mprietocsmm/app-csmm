@@ -124,6 +124,18 @@ public class Rest {
         });
     }
 
+    public void getCuenta(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/ajustes/cuenta",
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+
     public void getAjustes(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse) {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonObjectRequestWithCustomAuth(

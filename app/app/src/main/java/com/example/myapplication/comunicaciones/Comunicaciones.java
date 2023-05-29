@@ -75,7 +75,6 @@ public class Comunicaciones extends Fragment {
 
         crearAsistencia = view.findViewById(R.id.botonNuevaAsistencia);
         crearAsistencia.setOnClickListener(crearAsistenciaListener);
-
     }
 
     private void llenarRecyclerView() throws JSONException {
@@ -93,18 +92,13 @@ public class Comunicaciones extends Fragment {
                                         response.getJSONObject(i).getString("asunto"),
                                         response.getJSONObject(i).getString("mensaje"),
                                         response.getJSONObject(i).getString("remitente"));
-
                                 lista.add(comunicaciones);
-
                             }
 
-                            ComunicacionesAdapter adapter = new ComunicacionesAdapter(lista, new ComunicacionesAdapter.RecyclerItemClick() {
-                                @Override
-                                public void itemClick(ComunicacionesObjeto item) {
-                                    Intent intent = new Intent(getContext(), ComunicacionesCompletas.class);
-                                    intent.putExtra("comunicacion", item);
-                                    startActivity(intent);
-                                }
+                            ComunicacionesAdapter adapter = new ComunicacionesAdapter(lista, item -> {
+                                Intent intent = new Intent(getContext(), ComunicacionesCompletas.class);
+                                intent.putExtra("comunicacion", item);
+                                startActivity(intent);
                             });
 
                             recyclerView.setVisibility(View.VISIBLE);

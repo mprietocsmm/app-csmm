@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from csmm_app.endpoints import endpoints, comunicaciones, launcher, perfil, login, inicio
+from csmm_app.endpoints import endpoints, comunicaciones, launcher, perfil, login, inicio, ajustes
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +25,5 @@ urlpatterns = [
     path('comunicaciones', comunicaciones.comunicaciones),
     path('autenticar', launcher.authenticate),
     path('perfil', perfil.perfil),
+    path('ajustes/cuenta', ajustes.cuenta),
 ]

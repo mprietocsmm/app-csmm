@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="autentificacion_fases_category"
+        android:title="Autentificación en dos fases">
+
+        <SwitchPreferenceCompat
+            android:key="autentificacion_dos_fases"
+            android:icon="@drawable/ic_email"
+            android:title="Mensaje de texto"
+            android:summary="Usa tu teléfono móvil para recibir un mensaje con un código de autentificación que deberás introducir cuando inicies sesión."/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="proteccion_contraseña_category"
+        android:title="Protección con contraseña adicional">
+
+        <SwitchPreferenceCompat
+            android:key="proteccion_restablecimiento"
+            android:icon="@drawable/ic_seguridad"
+            android:title="Protección de restablecimiento de contraseña"
+            android:summary="Deberás confirmar tu dirección de correo o teléfono para poder restablecer la contraseña." />
+
+    </PreferenceCategory>
+</PreferenceScreen>
