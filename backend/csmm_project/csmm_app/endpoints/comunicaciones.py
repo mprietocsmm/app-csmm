@@ -96,6 +96,8 @@ def comunicaciones(request, modo):
     else:
         return JsonResponse({"error": "Método HTTP no soportado"}, status=405)
 
+
+
 def get_contactos(request):
 
     try:

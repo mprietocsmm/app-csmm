@@ -25,7 +25,7 @@ public class Rest {
     private static Rest INSTANCE;
 
     private String ANDROID_LOCALHOST = "http://10.0.2.2:8000";
-    private String PC_LOCALHOST = "http://192.168.51.231:8000";
+    private String PC_LOCALHOST = "http://192.168.82.231:8000";
     private String BASE_URL = ANDROID_LOCALHOST;
     private Context context;
     private RequestQueue queue;
@@ -124,6 +124,19 @@ public class Rest {
         });
     }
 
+
+    public void getCuenta(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/ajustes/cuenta",
+                null, 
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+  
     public void getContactos(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse, Context context) {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonArrayWithCustomAuth(
@@ -134,6 +147,18 @@ public class Rest {
                 onErrorResponse,
                 context
         ));
+    }
+
+    public void getAjustes(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/perfil",
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+         ));
     }
 
     public void getLlavero(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse, Context context) {
@@ -147,6 +172,19 @@ public class Rest {
                 context
         ));
     }
+
+    public void setAjustes(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.POST,
+                BASE_URL + "/perfil",
+                body,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+
 
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;

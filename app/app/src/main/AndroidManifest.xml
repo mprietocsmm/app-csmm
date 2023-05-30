@@ -41,6 +41,9 @@
             android:name=".comunicaciones.ComunicacionesCompletas"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".activities.Ajustes"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".comunicaciones.Destinatario"
             android:screenOrientation="portrait"/>
         <activity

@@ -148,13 +148,4 @@ public class CrearComunicacion extends AppCompatActivity {
         onBackPressed();
         return true;
     }
-
-    @Override
-    public void onBackPressed() {
-        SharedPreferences sharedPreferences = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
-        sharedPreferences.edit().clear().apply();
-        super.onBackPressed();
-        finish();
-    }
-
 }

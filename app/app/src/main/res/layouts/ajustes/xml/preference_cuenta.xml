@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:key="usuario"
+        android:summary="Usuario"
+        android:icon="@drawable/ic_usuario"/>
+
+    <Preference
+        android:key="nombre_completo"
+        android:summary="Nombre completo"
+        android:icon="@drawable/ic_cartera"/>
+
+    <Preference
+        android:key="fecha_nacimiento"
+        android:summary="Fecha de nacimiento"
+        android:icon="@drawable/ic_calendario"/>
+
+    <Preference
+        android:key="dni"
+        android:summary="DNI"
+        android:icon="@drawable/ic_dni"/>
+
+    <Preference
+        android:key="accesos_totales"
+        android:summary="Accesos totales"
+        android:icon="@drawable/ic_accesos"/>
+
+    <Preference
+        android:key="alumnos_asociados"
+        android:summary="Alumnos asociados"
+        android:icon="@drawable/ic_asociados"/>
+</PreferenceScreen>

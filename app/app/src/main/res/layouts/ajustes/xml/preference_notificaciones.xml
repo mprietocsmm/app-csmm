@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:key="notificaciones_push_category"
+        android:title="Notificaciones push"
+        android:icon="@drawable/ic_notificaciones" >
+        <SwitchPreferenceCompat
+            android:key="not_comunicaciones_push"
+            android:title="Comunicaciones" />
+        <SwitchPreferenceCompat
+            android:key="not_calificaciones_push"
+            android:title="Calificaciones"/>
+        <SwitchPreferenceCompat
+            android:key="not_entrevistas_push"
+            android:title="Entrevistas" />
+        <SwitchPreferenceCompat
+            android:key="not_extraescolares_push"
+            android:title="Extraescolares" />
+        <SwitchPreferenceCompat
+            android:key="not_enfermeria_push"
+            android:title="Enfermería" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory
+        android:key="notificaciones_mail_category"
+        android:title="Notificaciones por Email"
+        android:icon="@drawable/ic_email" >
+        <SwitchPreferenceCompat
+            android:key="not_comunicaciones_email"
+            android:title="Comunicaciones" />
+        <SwitchPreferenceCompat
+            android:key="not_calificaciones_email"
+            android:title="Calificaciones" />
+        <SwitchPreferenceCompat
+            android:key="not_entrevistas_email"
+            android:title="Entrevistas" />
+        <SwitchPreferenceCompat
+            android:key="not_extraescolares_email"
+            android:title="Extraescolares" />
+        <SwitchPreferenceCompat
+            android:key="not_enfermeria_email"
+            android:title="Enfermería" />
+    </PreferenceCategory>
+</PreferenceScreen>
