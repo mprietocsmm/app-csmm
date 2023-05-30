@@ -14,7 +14,7 @@
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/AppTheme.AppBarOverlay"
         app:layout_anchorGravity="center"
-        style="@style/ToolbarStyle"/>
+        style="@style/AppTheme.AppBarOverlay"/>
 
     <TextView
         android:id="@+id/aplicacion"
