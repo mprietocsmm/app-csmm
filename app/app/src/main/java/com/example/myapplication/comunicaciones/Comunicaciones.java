@@ -77,7 +77,6 @@ public class Comunicaciones extends Fragment {
 
         crearAsistencia = view.findViewById(R.id.botonNuevaAsistencia);
         crearAsistencia.setOnClickListener(crearAsistenciaListener);
-
         inicioTextView = view.findViewById(R.id.textViewInicio);
     }
 

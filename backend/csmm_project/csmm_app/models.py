@@ -321,6 +321,7 @@ class DocumentosAlumno(models.Model):
 
 
 class FamiliasAppAjustes(models.Model):
+    id = models.AutoField(primary_key=True)
     id_usuario = models.ForeignKey(Familias, models.DO_NOTHING, db_column='id_usuario')
     autentificacion_dos_fases = models.IntegerField()
     proteccion_restablecimiento = models.IntegerField()

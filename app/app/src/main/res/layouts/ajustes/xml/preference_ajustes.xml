@@ -1,0 +1,33 @@
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <Preference
+        android:key="cuenta"
+        android:title="Tu cuenta"
+        android:summary="Consulta la información de tu cuenta."
+        android:icon="@drawable/ic_cuenta"/>
+
+    <Preference
+        android:key="gestor"
+        android:title="Gestor Web CSMM"
+        android:summary="Reedirección al gestor web CSMM"
+        android:icon="@drawable/ic_web"/>
+
+    <Preference
+        android:key="seguridad"
+        android:title="Seguridad y acceso a la cuenta"
+        android:summary="Administra la seguridad de tu cuenta y lleva un control de su uso."
+        android:icon="@drawable/ic_seguridad"/>
+
+    <Preference
+        android:key="notificaciones"
+        android:title="Notificaciones"
+        android:summary="Selecciona el tipo de notificaciones que quieres recibir."
+        android:icon="@drawable/ic_notificaciones" />
+
+    <Preference
+        android:key="recursos_adicionales"
+        android:title="Recursos adicionales"
+        android:summary="Consulta más información útil sobre la aplicación"
+        android:icon="@drawable/ic_pregunta" />
+</PreferenceScreen>

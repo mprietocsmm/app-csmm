@@ -2,4 +2,19 @@
     <string name="app_name">Gestor CSMM</string>
     <string name="navigation_drawer_open">Drawer Open</string>
     <string name="navigation_drawer_close">Drawer Closed</string>
+    
+    <string-array name="ajustes">
+        <item>Autentificación en dos fases</item>
+        <item>Protección reetablecimiento</item>
+        <item>Notificaciones calificaciones</item>
+        <item>Notificaciones comunicaciones</item>
+        <item>Notificaciones entrevistas</item>
+        <item>Notificaciones extraescolares</item>
+        <item>Notificaciones enfermería</item>
+        <item>Email calificaciones</item>
+        <item>Email comunicaciones</item>
+        <item>Email entrevistas</item>
+        <item>Email extraescolares</item>
+        <item>Email enfermería</item>
+    </string-array>
 </resources>

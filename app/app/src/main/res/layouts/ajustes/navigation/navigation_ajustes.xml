@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_ajustes"
+    app:startDestination="@id/ajustesFragment">
+
+    <fragment
+        android:id="@+id/ajustesFragment"
+        android:name="com.example.myapplication.ajustes.fragments.AjustesFragment"
+        android:label="AjustesFragment" >
+        <action
+            android:id="@+id/action_ajustesFragment_to_cuentaFragment"
+            app:destination="@id/cuentaFragment" />
+        <action
+            android:id="@+id/action_ajustesFragment_to_notificacionesFragment"
+            app:destination="@id/notificacionesFragment" />
+        <action
+            android:id="@+id/action_ajustesFragment_to_seguridadFragment"
+            app:destination="@id/seguridadFragment" />
+        <action
+            android:id="@+id/action_ajustesFragment_to_recursosAdicionalesFragment"
+            app:destination="@id/recursosAdicionalesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/cuentaFragment"
+        android:name="com.example.myapplication.ajustes.fragments.CuentaFragment"
+        android:label="CuentaFragment" >
+        <action
+            android:id="@+id/action_cuentaFragment_to_ajustesFragment"
+            app:destination="@id/ajustesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/notificacionesFragment"
+        android:name="com.example.myapplication.ajustes.fragments.NotificacionesFragment"
+        android:label="NotificacionesFragment" >
+        <action
+            android:id="@+id/action_notificacionesFragment_to_ajustesFragment"
+            app:destination="@id/ajustesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/seguridadFragment"
+        android:name="com.example.myapplication.ajustes.fragments.SeguridadFragment"
+        android:label="SeguridadFragment" >
+        <action
+            android:id="@+id/action_seguridadFragment_to_ajustesFragment"
+            app:destination="@id/ajustesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recursosAdicionalesFragment"
+        android:name="com.example.myapplication.ajustes.fragments.RecursosAdicionalesFragment"
+        android:label="RecursosAdicionalesFragment" >
+        <action
+            android:id="@+id/action_recursosAdicionalesFragment_to_ajustesFragment"
+            app:destination="@id/ajustesFragment" />
+    </fragment>
+</navigation>
