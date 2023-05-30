@@ -74,3 +74,4 @@ def boolean_to_int(boolean):
         return 1
     else:
         return 0
+

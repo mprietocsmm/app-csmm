@@ -29,6 +29,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.activities.Ajustes;
 import com.example.myapplication.ajustes.fragments.AjustesFragment;
 import com.example.myapplication.comunicaciones.Comunicaciones;
+import com.example.myapplication.llavero.Llavero;
 import com.example.myapplication.login.Login;
 import com.example.myapplication.rest.Rest;
 import com.google.android.material.navigation.NavigationView;
@@ -148,6 +149,9 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
             case R.id.nav_item_ajustes:
                 intent = new Intent(this, Ajustes.class);
                 startActivity(intent);
+                break;
+            case R.id.nav_item_llavero:
+                fragment = Llavero.newInstance();
                 break;
             case R.id.nav_item_cerrar_sesion:
                 SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);

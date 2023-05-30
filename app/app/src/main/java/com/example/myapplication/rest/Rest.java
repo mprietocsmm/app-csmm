@@ -94,7 +94,7 @@ public class Rest {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonObjectRequest(
                 Request.Method.POST,
-                BASE_URL + "/comunicaciones",
+                BASE_URL + "/comunicaciones/enviar",
                 body,
                 onResponse,
                 onErrorResponse
@@ -105,7 +105,7 @@ public class Rest {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonArrayRequest(
                 Request.Method.GET,
-                BASE_URL + "/comunicaciones",
+                BASE_URL + "/comunicaciones/recibidas",
                 null,
                 onResponse,
                 onErrorResponse
@@ -124,11 +124,24 @@ public class Rest {
         });
     }
 
+
     public void getCuenta(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse) {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonObjectRequestWithCustomAuth(
                 Request.Method.GET,
                 BASE_URL + "/ajustes/cuenta",
+                null, 
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+  
+    public void getContactos(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse, Context context) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonArrayWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/contactos",
                 null,
                 onResponse,
                 onErrorResponse,
@@ -145,7 +158,19 @@ public class Rest {
                 onResponse,
                 onErrorResponse,
                 context
-        )).setRetryPolicy(new CustomRetryPolicy());
+         ));
+    }
+
+    public void getLlavero(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse, Context context) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonArrayWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/llavero",
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
     }
 
     public void setAjustes(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
@@ -157,8 +182,10 @@ public class Rest {
                 onResponse,
                 onErrorResponse,
                 context
-        )).setRetryPolicy(new CustomRetryPolicy());
+        ));
     }
+
+
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 
@@ -184,5 +211,32 @@ public class Rest {
             return myHeaders;
         }
     }
+
+    class JsonArrayWithCustomAuth extends JsonArrayRequest {
+        private Context context;
+
+        public JsonArrayWithCustomAuth(int method,
+                                                   String url,
+                                                   @Nullable JSONArray jsonRequest,
+                                                   Response.Listener<JSONArray> listener,
+                                                   @Nullable Response.ErrorListener errorListener,
+                                                    Context context) {
+            super(method, url, jsonRequest, listener, errorListener);
+            this.context = context;
+        }
+
+        @Override
+        public Map<String, String> getHeaders() throws AuthFailureError {
+            SharedPreferences preferences = context.getSharedPreferences("usuario", Context.MODE_PRIVATE);
+            String sessionToken = preferences.getString("token", null);
+            String tipoUsuario = preferences.getString("tipoUsuario", null);
+
+            HashMap<String, String> myHeaders = new HashMap<>();
+            myHeaders.put("token", sessionToken);
+            myHeaders.put("tipoUsuario", tipoUsuario);
+            return myHeaders;
+        }
+    }
+
 
 }

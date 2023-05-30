@@ -34,6 +34,7 @@ android {
                     'src/main/res/layouts/inicio',
                     'src/main/res/layouts/comunicaciones',
                     'src/main/res/layouts/ajustes',
+                    'src/main/res/layouts/llavero',
                     'src/main/res/layouts',
                     'src/main/res'
             ]

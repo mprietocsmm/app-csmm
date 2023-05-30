@@ -27,6 +27,10 @@
             android:id="@+id/nav_item_ajustes"
             android:icon="@drawable/ic_ajustes"
             android:title="Ajustes"/>
+        <item
+            android:id="@+id/nav_item_llavero"
+            android:icon="@drawable/llavero_icon"
+            android:title="Llavero"/>
     </group>
 
     <item android:title="TODO">

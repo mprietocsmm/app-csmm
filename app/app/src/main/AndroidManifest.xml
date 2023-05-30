@@ -43,6 +43,12 @@
         <activity
             android:name=".activities.Ajustes"
             android:screenOrientation="portrait"/>
+        <activity
+            android:name=".comunicaciones.Destinatario"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".llavero.LlaveCompleta"
+            android:screenOrientation="portrait"/>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
