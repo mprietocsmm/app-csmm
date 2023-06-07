@@ -13,7 +13,18 @@ def tipo_usuario(nombre):
     else:
         return 0
     
-
+def tipo_usuario_token(token):
+    if Administradores.objects.filter(token=token).count() != 0:
+        return 1
+    elif Alumnos.objects.filter(token=token).count() != 0:
+        return 2
+    elif Familias.objects.filter(token=token).count() != 0:
+        return 3
+    elif Profesores.objects.filter(token=token).count() != 0:
+        return 4
+    else:
+        return 0
+    
 def busqueda_usuario(usuario, tipo):
     if tipo == 1:
         return Administradores.objects.filter(usuario=usuario)

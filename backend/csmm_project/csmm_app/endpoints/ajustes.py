@@ -12,9 +12,7 @@ def cuenta(request):
     except KeyError:
         return JsonResponse({"error": "Faltan parámetros"}, status=400)
     
-    usuario = busqueda_usuario_token_tipo(token, tipo_usuario)
-    
-
+    usuario = busqueda_usuario_token_tipo(token, tipo_usuario) 
     return JsonResponse(
         {
             "usuario": usuario.usuario,

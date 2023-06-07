@@ -27,3 +27,4 @@ def inicio(request):
         return JsonResponse({
             "nombre": usuario[0].nombre + ' ' + usuario[0].apellido1 + ' ' + usuario[0].apellido2
         }, status=200)
+    
