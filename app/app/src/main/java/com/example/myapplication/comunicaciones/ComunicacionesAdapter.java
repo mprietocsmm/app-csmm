@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.alumnos.Alumno;
 import com.example.myapplication.objetos.ComunicacionesObjeto;
 
 import java.util.List;

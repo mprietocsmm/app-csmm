@@ -415,5 +415,11 @@ class ProfesorAsignaturas(models.Model):
         managed = False
         db_table = 'profesor_asignaturas'
 
+class Vistas(models.Model):
+    id = models.IntegerField(primary_key=True)
+    consulta = models.TextField()
 
+    class Meta:
+        managed = False
+        db_table = 'vistas'
 

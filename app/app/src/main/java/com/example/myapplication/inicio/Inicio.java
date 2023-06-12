@@ -28,6 +28,8 @@ import com.android.volley.VolleyError;
 import com.example.myapplication.R;
 import com.example.myapplication.activities.Ajustes;
 import com.example.myapplication.ajustes.fragments.AjustesFragment;
+import com.example.myapplication.alumnos.ListadoAlumnos;
+import com.example.myapplication.asignaturas.ListaAsignaturas;
 import com.example.myapplication.comunicaciones.Comunicaciones;
 import com.example.myapplication.llavero.Llavero;
 import com.example.myapplication.login.Login;
@@ -141,7 +143,7 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
                 Toast.makeText(this, "Clicaste Inicio", Toast.LENGTH_LONG).show();
                 break;
             case R.id.nav_item_asignaturas:
-                Toast.makeText(this, "Clicaste Asignaturas", Toast.LENGTH_SHORT).show();
+                fragment = ListaAsignaturas.newInstance();
                 break;
             case R.id.nav_item_comunicaciones:
                 fragment = Comunicaciones.newInstance();
@@ -152,6 +154,9 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
                 break;
             case R.id.nav_item_llavero:
                 fragment = Llavero.newInstance();
+                break;
+            case R.id.nav_item_listado_alumnos:
+                fragment = ListadoAlumnos.newInstance();
                 break;
             case R.id.nav_item_cerrar_sesion:
                 SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);

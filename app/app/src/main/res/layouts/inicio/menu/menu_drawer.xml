@@ -31,6 +31,11 @@
             android:id="@+id/nav_item_llavero"
             android:icon="@drawable/llavero_icon"
             android:title="Llavero"/>
+
+        <item
+            android:id="@+id/nav_item_listado_alumnos"
+            android:icon="@drawable/ic_grupo"
+            android:title="Listado Alumnos"/>
     </group>
 
     <item android:title="TODO">

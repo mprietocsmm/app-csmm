@@ -19,6 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapplication.R;
+import com.example.myapplication.alumnos.Alumno;
 import com.example.myapplication.objetos.ComunicacionesObjeto;
 import com.example.myapplication.rest.Rest;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -104,13 +105,10 @@ public class Comunicaciones extends Fragment {
 
                                 }
 
-                                ComunicacionesAdapter adapter = new ComunicacionesAdapter(lista, new ComunicacionesAdapter.RecyclerItemClick() {
-                                    @Override
-                                    public void itemClick(ComunicacionesObjeto item) {
-                                        Intent intent = new Intent(getContext(), ComunicacionesCompletas.class);
-                                        intent.putExtra("comunicacion", item);
-                                        startActivity(intent);
-                                    }
+                                ComunicacionesAdapter adapter = new ComunicacionesAdapter(lista, item -> {
+                                    Intent intent = new Intent(getContext(), ComunicacionesCompletas.class);
+                                    intent.putExtra("comunicacion", item);
+                                    startActivity(intent);
                                 });
 
                                 recyclerView.setVisibility(View.VISIBLE);

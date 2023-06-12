@@ -98,8 +98,7 @@ public class Llavero extends Fragment {
                         recyclerView.setVisibility(View.INVISIBLE);
                         inicioTextView.setVisibility(View.VISIBLE);
                     }
-                },
-                getContext()
+                }
         );
     }
 

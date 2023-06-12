@@ -35,6 +35,8 @@ android {
                     'src/main/res/layouts/comunicaciones',
                     'src/main/res/layouts/ajustes',
                     'src/main/res/layouts/llavero',
+                    'src/main/res/layouts/listado_alumnos',
+                    'src/main/res/layouts/asignaturas',
                     'src/main/res/layouts',
                     'src/main/res'
             ]

@@ -161,7 +161,7 @@ public class Rest {
          ));
     }
 
-    public void getLlavero(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse, Context context) {
+    public void getLlavero(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse) {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonArrayWithCustomAuth(
                 Request.Method.GET,
@@ -185,6 +185,29 @@ public class Rest {
         ));
     }
 
+    public void listadoAlumnos(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonArrayWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/alumnos",
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+
+    public void asignaturasAlumno(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonArrayWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/asignaturas",
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
 
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;

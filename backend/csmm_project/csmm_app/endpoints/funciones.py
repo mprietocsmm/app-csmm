@@ -75,3 +75,11 @@ def boolean_to_int(boolean):
     else:
         return 0
 
+def fetchallasdict(cursor):
+    # all rows from the cursor are returned in the form of dict
+    columns = [col[0] for col in cursor.description]
+    # returning dictionary
+    return [
+        dict(zip(columns, row))
+        for row in cursor.fetchall()
+    ]
