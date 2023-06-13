@@ -60,8 +60,8 @@ class Grupos(models.Model):
 
 class Materias(models.Model):
     id = models.IntegerField(primary_key=True)
-    materia = models.CharField(max_length=250)
-    tutor = models.CharField(max_length=250)
+    materia = models.CharField(max_length=25)
+    tutor = models.ForeignKey('Profesores', models.DO_NOTHING, db_column='tutor')
 
     class Meta:
         managed = False

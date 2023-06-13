@@ -30,6 +30,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Destinatario extends AppCompatActivity {
@@ -63,51 +64,47 @@ public class Destinatario extends AppCompatActivity {
         Rest rest = Rest.getInstance(context);
 
         rest.getContactos(
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        DestinatarioObject array[];
-                        array = new DestinatarioObject[response.length()];
-                        checked = new Boolean[response.length()];
-                        for (int i=0; i<response.length(); i++) {
-                            try {
-                                DestinatarioObject destinatario = new DestinatarioObject(response.getJSONObject(i).getInt("id"), response.getJSONObject(i).getInt("tipoUsuario"), response.getJSONObject(i).getString("nombre"));
-                                array[i] = destinatario;
+                response -> {
+                    DestinatarioObject[] array;
+                    array = new DestinatarioObject[response.length()];
+                    checked = new Boolean[response.length()];
+                    for (int i=0; i<response.length(); i++) {
+                        try {
+                            DestinatarioObject destinatario = new DestinatarioObject(response.getJSONObject(i).getInt("id"), response.getJSONObject(i).getInt("tipoUsuario"), response.getJSONObject(i).getString("nombre"));
+                            array[i] = destinatario;
 
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+
+                    SharedPreferences sharedPreferences = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
+                    if (sharedPreferences.getString("destinatarios", null) != null) {
+                        try {
+                            JSONObject object = new JSONObject(sharedPreferences.getString("destinatarios", null));
+                            JSONArray jsonArray = object.getJSONArray("destinatarios");
+
+                            for (int i=0; i<checked.length; i++) {
+                                checked[i] = jsonArray.getJSONObject(i).getBoolean("checked");
                             }
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
                         }
 
-                        SharedPreferences sharedPreferences = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
-                        if (sharedPreferences.getString("destinatarios", null) != null) {
-                            try {
-                                JSONObject object = new JSONObject(sharedPreferences.getString("destinatarios", null));
-                                JSONArray jsonArray = object.getJSONArray("destinatarios");
 
-                                for (int i=0; i<checked.length; i++) {
-                                    checked[i] = jsonArray.getJSONObject(i).getBoolean("checked");
-                                }
-                            } catch (JSONException e) {
-                                throw new RuntimeException(e);
-                            }
-
-
-                        } else {
-                            for (int i=0; i<checked.length; i++)
-                                checked[i] = false;
-                        }
-                        adapter = new DestinatarioAdapter(context, array, checked);
-                        listener = (ConfirmarListener) adapter;
-                        listView.setAdapter(adapter);
+                    } else {
+                        // Método para rellenar un
+                        Arrays.fill(checked, false);
+                        /*
+                        for (int i=0; i<checked.length; i++)
+                            checked[i] = false;
+                         */
                     }
+                    adapter = new DestinatarioAdapter(context, array, checked);
+                    listener = (ConfirmarListener) adapter;
+                    listView.setAdapter(adapter);
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                },
+                error -> Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show(),
                 context
         );
     }
@@ -140,7 +137,7 @@ public class Destinatario extends AppCompatActivity {
             }
 
             SharedPreferences sharedPreferences = getSharedPreferences("destinatarios", Context.MODE_PRIVATE);
-            sharedPreferences.edit().putString("destinatarios", destinatarios.toString()).commit();
+            sharedPreferences.edit().putString("destinatarios", destinatarios.toString()).apply();
             onBackPressed();
             finish();
         }
