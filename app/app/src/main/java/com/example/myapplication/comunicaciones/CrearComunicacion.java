@@ -82,11 +82,12 @@ public class CrearComunicacion extends AppCompatActivity {
 
                 try {
                     object = new JSONObject(sharedPreferencesDestinatarios.getString("destinatarios", null));
-                    destinatariosArray = object.getJSONArray("destinatarios");
+                    JSONArray temp;
+                    temp = object.getJSONArray("destinatarios");
 
-                    for (int i=0; i<destinatariosArray.length(); i++) {
-                        if (!destinatariosArray.getJSONObject(i).getBoolean("checked"))
-                            destinatariosArray.remove(i);
+                    for (int i=0; i<temp.length(); i++) {
+                        if (temp.getJSONObject(i).getBoolean("checked"))
+                            destinatariosArray.put(temp.getJSONObject(i));
                     }
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -110,23 +111,15 @@ public class CrearComunicacion extends AppCompatActivity {
                     }
 
                     rest.comunicaciones(
-                            new Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
-                                    Toast.makeText(context, "¡Comunicación enviada con éxito!", Toast.LENGTH_SHORT).show();
-                                    onBackPressed();
-                                    finish();
-                                }
+                            response -> {
+                                Toast.makeText(context, "¡Comunicación enviada con éxito!", Toast.LENGTH_SHORT).show();
+                                onBackPressed();
+                                finish();
                             },
-                            new Response.ErrorListener() {
-                                @Override
-                                public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(context, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            },
+                            error -> Toast.makeText(context, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show(),
                             body
                     );
-                    sharedPreferencesDestinatarios.edit().clear();
+                    sharedPreferencesDestinatarios.edit().clear().apply();
                 } else {
                     Toast.makeText(context, "Ningún destinatario seleccionado", Toast.LENGTH_LONG).show();
                 }
@@ -135,12 +128,9 @@ public class CrearComunicacion extends AppCompatActivity {
         }
     };
 
-    View.OnClickListener destinatarioListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(CrearComunicacion.this, Destinatario.class);
-            startActivity(intent);
-        }
+    View.OnClickListener destinatarioListener = v -> {
+        Intent intent = new Intent(CrearComunicacion.this, Destinatario.class);
+        startActivity(intent);
     };
 
     @Override

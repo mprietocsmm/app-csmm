@@ -83,65 +83,55 @@ public class Comunicaciones extends Fragment {
     private void llenarRecyclerView() throws JSONException {
         Rest rest = Rest.getInstance(getContext());
         rest.getComunicaciones(
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
+                response -> {
+                    if (response.length() != 0) {
+                        recyclerView.setVisibility(View.VISIBLE);
+                        inicioTextView.setVisibility(View.INVISIBLE);
+                        try {
+                            List<ComunicacionesObjeto> lista = new ArrayList<>();
 
-                        if (response.length() != 0) {
-                            recyclerView.setVisibility(View.VISIBLE);
-                            inicioTextView.setVisibility(View.INVISIBLE);
-                            try {
-                                List<ComunicacionesObjeto> lista = new ArrayList<>();
+                            for (int i=0; i<response.length(); i++) {
 
-                                for (int i=0; i<response.length(); i++) {
+                                ComunicacionesObjeto comunicaciones = new ComunicacionesObjeto(
+                                        response.getJSONObject(i).getString("asunto"),
+                                        response.getJSONObject(i).getString("mensaje"),
+                                        response.getJSONObject(i).getString("remitente"),
+                                        response.getJSONObject(i).getString("fecha"));
+                                lista.add(comunicaciones);
 
-                                    ComunicacionesObjeto comunicaciones = new ComunicacionesObjeto(
-                                            response.getJSONObject(i).getString("asunto"),
-                                            response.getJSONObject(i).getString("mensaje"),
-                                            response.getJSONObject(i).getString("remitente"));
-
-                                    lista.add(comunicaciones);
-
-                                }
-
-                                ComunicacionesAdapter adapter = new ComunicacionesAdapter(lista, new ComunicacionesAdapter.RecyclerItemClick() {
-                                    @Override
-                                    public void itemClick(ComunicacionesObjeto item) {
-                                        Intent intent = new Intent(getContext(), ComunicacionesCompletas.class);
-                                        intent.putExtra("comunicacion", item);
-                                        startActivity(intent);
-                                    }
-                                });
-
-                                recyclerView.setVisibility(View.VISIBLE);
-
-                                // Parar la preview de carga de datos y hacerla desaparecer
-                                shimmerFrameLayout.stopShimmer();
-                                shimmerFrameLayout.setVisibility(View.GONE);
-
-                                recyclerView.setAdapter(adapter);
-                            } catch (JSONException e) {
-                                swipeRefresh.setRefreshing(false);
-                                throw new RuntimeException(e);
                             }
 
-                        } else {
-                            recyclerView.setVisibility(View.INVISIBLE);
-                            inicioTextView.setVisibility(View.VISIBLE);
-                            shimmerFrameLayout.setVisibility(View.INVISIBLE);
+                            ComunicacionesAdapter adapter = new ComunicacionesAdapter(lista, item -> {
+                                Intent intent = new Intent(getContext(), ComunicacionesCompletas.class);
+                                intent.putExtra("comunicacion", item);
+                                startActivity(intent);
+                            });
+
+                            recyclerView.setVisibility(View.VISIBLE);
+
+                            // Parar la preview de carga de datos y hacerla desaparecer
+                            shimmerFrameLayout.stopShimmer();
+                            shimmerFrameLayout.setVisibility(View.GONE);
+
+                            recyclerView.setAdapter(adapter);
+                        } catch (JSONException e) {
+                            swipeRefresh.setRefreshing(false);
+                            throw new RuntimeException(e);
                         }
 
-                        swipeRefresh.setRefreshing(false);
+                    } else {
+                        recyclerView.setVisibility(View.INVISIBLE);
+                        inicioTextView.setVisibility(View.VISIBLE);
+                        shimmerFrameLayout.setVisibility(View.INVISIBLE);
                     }
+
+                    swipeRefresh.setRefreshing(false);
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getContext(), "Fallo de conexión: " + error.toString(), Toast.LENGTH_LONG).show();
-                        swipeRefresh.setRefreshing(false);
-                        recyclerView.setVisibility(View.GONE);
-                        shimmerFrameLayout.setVisibility(View.VISIBLE);
-                    }
+                error -> {
+                    Toast.makeText(getContext(), "Fallo de conexión: " + error.toString(), Toast.LENGTH_LONG).show();
+                    swipeRefresh.setRefreshing(false);
+                    recyclerView.setVisibility(View.GONE);
+                    shimmerFrameLayout.setVisibility(View.VISIBLE);
                 }
         );
     }

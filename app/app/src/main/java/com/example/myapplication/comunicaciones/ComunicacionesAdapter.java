@@ -36,7 +36,7 @@ public class ComunicacionesAdapter extends RecyclerView.Adapter<ComunicacionesAd
         holder.asuntoTextView.setText(lista.get(position).getAsunto());
         holder.remitenteTextView.setText(lista.get(position).getRemitente());
         holder.mensajeTextView.setText(lista.get(position).getMensaje());
-
+        holder.fechaTextView.setText(lista.get(position).getFecha());
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +54,7 @@ public class ComunicacionesAdapter extends RecyclerView.Adapter<ComunicacionesAd
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView asuntoTextView, remitenteTextView, mensajeTextView;
+        public TextView asuntoTextView, remitenteTextView, mensajeTextView, fechaTextView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,6 +62,7 @@ public class ComunicacionesAdapter extends RecyclerView.Adapter<ComunicacionesAd
             asuntoTextView = itemView.findViewById(R.id.asuntoTextView);
             remitenteTextView = itemView.findViewById(R.id.remitenteTextView);
             mensajeTextView = itemView.findViewById(R.id.mensajeTextView);
+            fechaTextView = itemView.findViewById(R.id.fechaTextView);
         }
     }
 
