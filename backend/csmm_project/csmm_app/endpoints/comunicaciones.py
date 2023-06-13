@@ -126,7 +126,6 @@ def get_contactos(request):
             for asignatura in asignaturas:
                 response.append({"id": asignatura.id_asignatura.id_materia.tutor.id, "tipoUsuario": 4, "nombre": asignatura.id_asignatura.id_materia.tutor.nombre + " (tutor/ra de " + hijo.nombre + ")"})
 
-        print(response)
     elif tipo == 4:
         familia = Familias.objects.all()
 
