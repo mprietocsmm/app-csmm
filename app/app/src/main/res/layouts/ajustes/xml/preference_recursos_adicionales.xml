@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:key="version"
+        app:icon="@drawable/ic_info"
+        app:summary="..."
+        app:title="Versión"/>
+
+    <PreferenceCategory
+        app:key="obtener_ayuda"
+        app:title="Obtener ayuda">
+
+        <SwitchPreferenceCompat
+            app:key="informe_fallos"
+            app:icon="@drawable/ic_bug"
+            app:title="Enviar informe de fallos"
+            app:defaultValue="true"
+            app:summary="Enviar automáticamente los informes de fallos al equipo de desarrollo del CSMM."/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="legal_category"
+        app:title="Legal">
+
+        <Preference
+            app:key="condiciones_de_uso"
+            app:title="Condiciones de uso"
+            app:icon="@drawable/ic_archivo"/>
+
+        <Preference
+            android:key="politica_privacidad"
+            app:title="Política de privacidad"
+            android:icon="@drawable/ic_privacidad"/>
+
+        <Preference
+            app:key="avisos_legales"
+            app:title="Avisos legales"
+            app:icon="@drawable/ic_legal"/>
+
+    </PreferenceCategory>
+</PreferenceScreen>

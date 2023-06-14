@@ -20,11 +20,16 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.myapplication.R;
+import com.example.myapplication.activities.Ajustes;
+import com.example.myapplication.ajustes.fragments.AjustesFragment;
 import com.example.myapplication.comunicaciones.Comunicaciones;
+import com.example.myapplication.llavero.Llavero;
 import com.example.myapplication.login.Login;
 import com.example.myapplication.rest.Rest;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -39,7 +44,8 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
     private TextView nombre;
-    private final Rest rest = Rest.getInstance(this);
+    private Rest rest = Rest.getInstance(this);
+    private Context context = this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +79,7 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
 
         // Configuración del elemento default para que aparezca al iniciarse la activity y salga check
         onNavigationItemSelected(navigationView.getMenu().findItem(R.id.nav_item_comunicaciones).setChecked(true));
+        SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
 
         try {
             peticionInicio();
@@ -86,7 +93,6 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
         SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
         body.put("token", sharedPreferences.getString("token", null));
         body.put("tipoUsuario", sharedPreferences.getString("tipoUsuario", null));
-
         rest.inicio(
                 response ->  {
                         try {
@@ -150,6 +156,8 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment = null;
+        Intent intent = null;
+
         switch (item.getItemId()) {
             case R.id.nav_item_inicio:
                 Toast.makeText(this, "Clicaste Inicio", Toast.LENGTH_LONG).show();
@@ -160,11 +168,18 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
             case R.id.nav_item_comunicaciones:
                 fragment = Comunicaciones.newInstance();
                 break;
+            case R.id.nav_item_ajustes:
+                intent = new Intent(this, Ajustes.class);
+                startActivity(intent);
+                break;
+            case R.id.nav_item_llavero:
+                fragment = Llavero.newInstance();
+                break;
             case R.id.nav_item_cerrar_sesion:
                 SharedPreferences sharedPreferences = getSharedPreferences("usuario", Context.MODE_PRIVATE);
 
                 if (sharedPreferences.edit().remove("token").commit() == true && sharedPreferences.edit().remove("tipoUsuario").commit()) {
-                    //Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Cerrando sesión...", Toast.LENGTH_SHORT).show();
 
                     SharedPreferences sharedPreferencesTokenFCM = getSharedPreferences("tokenFCM", Context.MODE_PRIVATE);
                     JSONObject body = new JSONObject();
@@ -182,8 +197,8 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
                             response -> {
                                 sharedPreferencesTokenFCM.edit().remove("isTokenSaved").apply();
                                 sharedPreferencesTokenFCM.edit().remove("token").apply();
-                                Intent intent = new Intent(this, Login.class);
-                                startActivity(intent);
+                                Intent intenTemp = new Intent(this, Login.class);
+                                startActivity(intenTemp);
                                 finish();
                             },
                             error -> {
@@ -192,17 +207,14 @@ public class Inicio extends AppCompatActivity implements NavigationView.OnNaviga
                             body
                     );
 
-
-
-
                 } else {
                     Toast.makeText(this, "Error cerrando sesión", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
 
-        getSupportActionBar().setTitle(item.getTitle());
         if (fragment != null) {
+            getSupportActionBar().setTitle(item.getTitle());
             setFragment(fragment);
         }
 

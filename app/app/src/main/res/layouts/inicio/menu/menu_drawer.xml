@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:checkableBehavior="single">
         <item
@@ -21,6 +22,15 @@
             android:id="@+id/nav_item_asignaturas"
             android:icon="@drawable/asignaturas_icon"
             android:title="Asignaturas"/>
+
+        <item
+            android:id="@+id/nav_item_ajustes"
+            android:icon="@drawable/ic_ajustes"
+            android:title="Ajustes"/>
+        <item
+            android:id="@+id/nav_item_llavero"
+            android:icon="@drawable/llavero_icon"
+            android:title="Llavero"/>
     </group>
 
     <item android:title="TODO">

@@ -25,7 +25,7 @@ public class Rest {
     private static Rest INSTANCE;
 
     private String ANDROID_LOCALHOST = "http://10.0.2.2:8000";
-    private String PC_LOCALHOST = "http://192.168.146.231:8000";
+    private String PC_LOCALHOST = "http://192.168.82.231:8000";
     private String BASE_URL = ANDROID_LOCALHOST;
     private Context context;
     private RequestQueue queue;
@@ -124,12 +124,61 @@ public class Rest {
         });
     }
 
+
+    public void getCuenta(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/ajustes/cuenta",
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+
     public void getContactos(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse, Context context) {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonArrayWithCustomAuth(
                 Request.Method.GET,
                 BASE_URL + "/contactos",
                 null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+
+    public void getAjustes(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/perfil",
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+
+    public void getLlavero(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse, Context context) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonArrayWithCustomAuth(
+                Request.Method.GET,
+                BASE_URL + "/llavero",
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+
+    public void setAjustes(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.POST,
+                BASE_URL + "/perfil",
+                body,
                 onResponse,
                 onErrorResponse,
                 context
@@ -188,17 +237,17 @@ public class Rest {
         private Context context;
 
         public JsonArrayWithCustomAuth(int method,
-                                                   String url,
-                                                   @Nullable JSONArray jsonRequest,
-                                                   Response.Listener<JSONArray> listener,
-                                                   @Nullable Response.ErrorListener errorListener,
-                                                    Context context) {
+                                       String url,
+                                       @Nullable JSONArray jsonRequest,
+                                       Response.Listener<JSONArray> listener,
+                                       @Nullable Response.ErrorListener errorListener,
+                                       Context context) {
             super(method, url, jsonRequest, listener, errorListener);
             this.context = context;
         }
 
         @Override
-        public Map<String, String> getHeaders() throws AuthFailureError {
+        public Map<String, String> getHeaders() {
             SharedPreferences preferences = context.getSharedPreferences("usuario", Context.MODE_PRIVATE);
             String sessionToken = preferences.getString("token", null);
             String tipoUsuario = preferences.getString("tipoUsuario", null);
@@ -214,11 +263,11 @@ public class Rest {
         private Context context;
 
         public JsonObjectRequestWithCustomAuthFCM(int method,
-                                               String url,
-                                               @Nullable JSONObject jsonRequest,
-                                               Response.Listener<JSONObject> listener,
-                                               @Nullable Response.ErrorListener errorListener,
-                                               Context context) {
+                                                  String url,
+                                                  @Nullable JSONObject jsonRequest,
+                                                  Response.Listener<JSONObject> listener,
+                                                  @Nullable Response.ErrorListener errorListener,
+                                                  Context context) {
             super(method, url, jsonRequest, listener, errorListener);
             this.context = context;
         }

@@ -31,6 +31,7 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:itemTextAppearance="@style/NavigationDrawerTextStyle"
+        app:itemBackground="@android:color/transparent"
         app:headerLayout="@layout/nav_header_layout"
         app:menu="@menu/menu_drawer"/>
 

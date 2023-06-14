@@ -68,3 +68,10 @@ def busqueda_usuario_id_tipo(id, tipo):
         return Familias.objects.get(id=id)
     elif tipo == 4:
         return Profesores.objects.get(id=id)
+    
+def boolean_to_int(boolean):
+    if boolean is True:
+        return 1
+    else:
+        return 0
+

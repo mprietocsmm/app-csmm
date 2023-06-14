@@ -1,14 +1,9 @@
 from django.http import JsonResponse
-from django.utils import timezone
-from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
-from csmm_app.models import Comunicaciones, ComunicacionesDestinos, TokenFcm
 from csmm_app.endpoints.funciones import *
-import config
-import json
-import datetime
-import firebase_admin
+import config, json, datetime, firebase_admin
 from firebase_admin import credentials, messaging
+from csmm_app.models import *
 
 firebase_cred = credentials.Certificate(config.SERVICE_ACCOUNT_KEY)
 firebase_app = firebase_admin.initialize_app(firebase_cred)
@@ -137,7 +132,8 @@ def comunicaciones(request, modo):
                         "id": comunicacion.idcomunicacion,
                         "asunto": comunicacion.asunto,
                         "mensaje": comunicacion.texto,
-                        "remitente": remitente.nombre + " " + remitente.apellido1 + " " + remitente.apellido2
+                        "remitente": remitente.nombre + " " + remitente.apellido1 + " " + remitente.apellido2,
+                        "fecha": comunicacion.fecha.strftime("%d/%m/%Y %H:%M")
                     }
                 )
             return JsonResponse(response, safe=False, status=200)
@@ -173,6 +169,8 @@ def comunicaciones(request, modo):
     else:
         return JsonResponse({"error": "Método HTTP no soportado"}, status=405)
 
+
+
 def get_contactos(request):
 
     try:
@@ -192,13 +190,16 @@ def get_contactos(request):
     
     elif tipo == 3:
         hijos = hijos_token(token)
-        destinatarios = Profesores.objects.filter(Q(id=1) | Q(id=2))
-        '''
+        
+        # Encontramos los hijos de el padre/madre
         for hijo in hijos:
-            response.append({"id": hijo.id, "nombre": hijo.nombre, "tipoUsuario": 3})
-        '''
-        for destinatario in destinatarios:
-            response.append({"id":destinatario.id, "nombre": destinatario.nombre, "tipoUsuario": 4})
+            # Encontramos las asignaturas que tiene cada hijo
+            asignaturas = AlumnosAsignaturas.objects.filter(id_alumno__id=hijo.id)
+
+            # De cada asignatura recuperamos el profesor
+            for asignatura in asignaturas:
+                response.append({"id": asignatura.id_asignatura.id_materia.tutor.id, "tipoUsuario": 4, "nombre": asignatura.id_asignatura.id_materia.tutor.nombre + " (tutor/ra de " + hijo.nombre + ")"})
+
     elif tipo == 4:
         familia = Familias.objects.all()
 
