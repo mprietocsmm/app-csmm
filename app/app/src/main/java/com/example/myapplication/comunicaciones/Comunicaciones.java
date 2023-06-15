@@ -245,7 +245,6 @@ public class Comunicaciones extends Fragment {
             Rest rest = Rest.getInstance(getContext());
 
             if (direction == ItemTouchHelper.RIGHT) {
-
                 if (getModo().equals(RECIBIDAS)) {
                     rest.eliminarComunicacion(
                             response -> {
@@ -326,7 +325,6 @@ public class Comunicaciones extends Fragment {
             case "Borrados":
                 return ELIMINADAS;
         }
-
         return null;
     }
 }

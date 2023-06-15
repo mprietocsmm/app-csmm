@@ -191,7 +191,6 @@ def eliminado(request, id_comunicacion):
             return JsonResponse({"error": str(error)}, status=404)
         
         comunicacion_destino.update(eliminado=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
-
         return JsonResponse({}, status=200)
 
     # Restaurar comunicacion
@@ -213,7 +212,7 @@ def eliminado(request, id_comunicacion):
 def importante(request, id_comunicacion):
     if request.method != 'POST':
         return JsonResponse({"error": "Método http no soportado"}, status=405)
-    
+
     body = json.loads(request.body)
     try:
         importante = body['importante']
