@@ -37,14 +37,17 @@ def busqueda_usuario_token(token):
     
 def busqueda_usuario_token_tipo(token, tipo):
     tipo = int(tipo)
-    if tipo == 1:
-        return Administradores.objects.get(token=token)
-    elif tipo == 2:
-        return Alumnos.objects.get(token=token)
-    elif tipo == 3:
-        return Familias.objects.get(token=token)
-    elif tipo == 4:
-        return Profesores.objects.get(token=token)
+    try:
+        if tipo == 1:
+            return Administradores.objects.get(token=token)
+        elif tipo == 2:
+            return Alumnos.objects.get(token=token)
+        elif tipo == 3:
+            return Familias.objects.get(token=token)
+        elif tipo == 4:
+            return Profesores.objects.get(token=token)
+    except (Administradores.DoesNotExist, Alumnos.DoesNotExist, Familias.DoesNotExist, Profesores.DoesNotExist):
+        return 404
     
 def hijos(nombre):
     padre = Familias.objects.filter(usuario=nombre)

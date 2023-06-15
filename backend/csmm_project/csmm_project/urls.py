@@ -28,4 +28,7 @@ urlpatterns = [
     path('comunicaciones/<str:modo>', comunicaciones.comunicaciones),
     path('contactos', comunicaciones.get_contactos),
     path('llavero', llavero.llavero),
+    path('leido/<int:id_comunicacion>', comunicaciones.leido),
+    path('eliminado/<int:id_comunicacion>', comunicaciones.eliminado),
+    path('importante/<int:id_comunicacion>', comunicaciones.importante)
 ]

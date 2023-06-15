@@ -9,6 +9,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,6 +35,7 @@ import java.util.Locale;
 public class CrearComunicacion extends AppCompatActivity {
     private Button enviarButton, botonDestinatario;
     private TextInputEditText asuntoTextInput, mensajeTextInput;
+    private CheckBox checkBoxImportante;
     private Toolbar toolbar;
     private JSONArray destinatarios;
     private Context context = this;
@@ -53,6 +55,7 @@ public class CrearComunicacion extends AppCompatActivity {
         botonDestinatario.setOnClickListener(destinatarioListener);
         asuntoTextInput = findViewById(R.id.asuntoTextInput);
         mensajeTextInput = findViewById(R.id.mensajeTextInput);
+        checkBoxImportante = findViewById(R.id.checkbox_importante);
 
         enviarButton = findViewById(R.id.enviarButton);
         enviarButton.setOnClickListener(enviarListener);
@@ -106,6 +109,10 @@ public class CrearComunicacion extends AppCompatActivity {
                         body.put("destinatarios", destinatariosArray);
                         body.put("asunto", asuntoTextInput.getText().toString());
                         body.put("mensaje", mensajeTextInput.getText().toString());
+                        if (checkBoxImportante.isChecked())
+                            body.put("importante", 1);
+                        else
+                            body.put("importante", 0);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }

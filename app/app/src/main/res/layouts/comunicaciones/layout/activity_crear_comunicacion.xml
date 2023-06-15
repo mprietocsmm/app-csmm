@@ -59,6 +59,15 @@
           android:gravity="top|start"/>
    </com.google.android.material.textfield.TextInputLayout>
 
+   <com.google.android.material.checkbox.MaterialCheckBox
+       android:id="@+id/checkbox_importante"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       app:layout_constraintTop_toBottomOf="@+id/mensajeTextInputLayout"
+       app:layout_constraintStart_toStartOf="@+id/mensajeTextInputLayout"
+       android:layout_marginTop="15dp"
+       android:text="Importante"
+       android:textSize="16dp"/>
    <Button
        android:id="@+id/enviarButton"
        android:layout_width="215dp"

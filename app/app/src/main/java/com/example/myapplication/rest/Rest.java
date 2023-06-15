@@ -25,7 +25,7 @@ public class Rest {
     private static Rest INSTANCE;
 
     private String ANDROID_LOCALHOST = "http://10.0.2.2:8000";
-    private String PC_LOCALHOST = "http://192.168.82.231:8000";
+    private String PC_LOCALHOST = "http://192.168.67.231:8000";
     private String BASE_URL = ANDROID_LOCALHOST;
     private Context context;
     private RequestQueue queue;
@@ -101,11 +101,11 @@ public class Rest {
         )).setRetryPolicy(new CustomRetryPolicy());
     }
 
-    public void getComunicaciones(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse) {
+    public void getComunicaciones(Response.Listener<JSONArray> onResponse, Response.ErrorListener onErrorResponse, String modo) {
         queue = Volley.newRequestQueue(context);
         queue.add(new JsonArrayRequest(
                 Request.Method.GET,
-                BASE_URL + "/comunicaciones/recibidas",
+                BASE_URL + "/comunicaciones/" + modo,
                 null,
                 onResponse,
                 onErrorResponse
@@ -185,7 +185,52 @@ public class Rest {
         ));
     }
 
+    public void leido(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, int idComunicacion) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.POST,
+                BASE_URL + "/leido/" + idComunicacion,
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
 
+    public void eliminarComunicacion(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, int idComunicacion) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.DELETE,
+                BASE_URL + "/eliminado/" + idComunicacion,
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+
+    public void restaurarComunicacion(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, int idComunicacion) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.PATCH,
+                BASE_URL + "/eliminado/" + idComunicacion,
+                null,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
+    public void setImportancia(Response.Listener<JSONObject> onResponse, Response.ErrorListener onErrorResponse, JSONObject body,int idComunicacion) {
+        queue = Volley.newRequestQueue(context);
+        queue.add(new JsonObjectRequestWithCustomAuth(
+                Request.Method.POST,
+                BASE_URL + "/importante/" + idComunicacion,
+                body,
+                onResponse,
+                onErrorResponse,
+                context
+        ));
+    }
     class JsonObjectRequestWithCustomAuth extends JsonObjectRequest {
         private Context context;
 
